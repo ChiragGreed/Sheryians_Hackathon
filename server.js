@@ -1,7 +1,10 @@
 import app from './src/app..js';
+import { Config } from './src/config/config.js';
+import ConntectToDb from './src/config/database.js';
 
-const PORT = process.env.PORT || 9010;
+ConntectToDb();
 
-app.listen(PORT,()=>{
-    console.log(`Server is running on port ${PORT}`);
+
+app.listen(Config.PORT, () => {
+    console.log(`Server running at port ${Config.PORT}`);
 })

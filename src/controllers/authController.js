@@ -17,7 +17,7 @@ function tokenGeneration(user, res) {
 }
 
 export const register = async (req, res) => {
-    const { fullname, email, contact, password, role } = req.body;
+    const { fullname, email, password, role } = req.body;
 
     const userExist = await userModel.findOne({ $or: [{ fullname }, { email }] });
 
@@ -26,7 +26,7 @@ export const register = async (req, res) => {
         success: false,
     })
 
-    const user = await userModel.create({ fullname, email, password, contact, role });
+    const user = await userModel.create({ fullname, email, password,  role });
 
     tokenGeneration(user, res);
 
