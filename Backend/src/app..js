@@ -3,7 +3,7 @@ import cookieParser from 'cookie-parser';
 import authRouter from './routes/authRouter.js';
 import passport from 'passport';
 import GoogleStrategy from 'passport-google-oauth20';
-import { Config } from '../src/config/config.js';
+import { Config } from './config/config.js';
 import cors from 'cors';
 
 

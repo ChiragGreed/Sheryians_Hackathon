@@ -6,5 +6,4 @@ ConntectToDb();
 
 
 app.listen(Config.PORT, () => {
-    console.log(`Server running at port ${Config.PORT}`);
-})
+    console.log(`Server running at port ${
