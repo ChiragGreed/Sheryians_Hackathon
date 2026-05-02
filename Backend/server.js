@@ -4,7 +4,6 @@ import ConntectToDb from './src/config/database.js';
 
 ConntectToDb();
 
-
 app.listen(Config.PORT, () => {
     console.log(`Server running at port ${Config.PORT}`);
 })
