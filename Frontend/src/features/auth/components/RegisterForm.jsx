@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { Link, useNavigate } from 'react-router';
-import { registerApi } from '../services/auth.api';
+import { register } from '../services/auth.api';
 import { setCredentials } from '../store/authSlice';
 
 const RegisterForm = () => {
@@ -21,7 +21,7 @@ const RegisterForm = () => {
     setLoading(true);
 
     try {
-      const response = await registerApi({ username, email, password, organizationName });
+      const response = await register(username, email, password, organizationName);
       
       dispatch(setCredentials({ user: response.data.user }));
       

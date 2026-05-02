@@ -25,11 +25,12 @@ const App = () => {
           path: "/register",
           element: <Register />
         },
-        {
-          path: "/chat",
-          element: <ChatPage />
-        }
       ]
+    },
+    // ChatPage has its own full-screen layout (no Navbar/Footer)
+    {
+      path: "/chat",
+      element: <ChatPage />
     }
   ])
 
