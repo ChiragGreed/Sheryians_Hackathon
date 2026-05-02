@@ -1,28 +1,47 @@
-import { config } from "dotenv";
 import { Config } from "../config/config.js";
 import userModel from "../models/userModel.js";
 import JWT from "jsonwebtoken";
 import bcrypt from "bcryptjs";
+import slugify from "slugify";
+import organizationModel from "../models/organizationModel.js";
+import mongoose from "mongoose";
 
-function tokenGeneration(user, res) {
+function generateToken(user) {
+    return JWT.sign(
+        {
+            userId: user._id,
+            organizationId: user.organizationId,
+            role: user.role
+        },
+        Config.JWT_SECRET,
+        { expiresIn: "7d" }
+    );
+};
 
-    const token = JWT.sign({
-        userId: user._id,
-        fullname: user.fullname,
-    }, Config.JWT_SECRET,
-        { expiresIn: '7d' });
-
-    res.cookie("token", token);
-
+async function generateUniqueSlug(baseName, maxAttempts = 10) {
+    const baseSlug = slugify(baseName, { lower: true, strict: true });
+    let slug = baseSlug;
+    for (let i = 0; i < maxAttempts; i++) {
+        const existingOrg = await organizationModel.findOne({ slug });
+        if (!existingOrg) return slug;
+        slug = baseSlug + "-" + (i + 2);
+    }
+    return null;
 }
 
 export const register = async (req, res) => {
-    const { fullname, email, password, role } = req.body;
+    const { username, email, password, organizationName } = req.body;
 
-    const userExist = await userModel.findOne({ $or: [{ fullname }, { email }] });
+    if (!username || !email || !password || !organizationName) {
+        return res.status(400).json({
+            message: "All fields are required",
+            success: false
+        });
+    }
+    const userExist = await userModel.findOne({ $or: [{ username }, { email }] });
 
     if (userExist) return res.status(400).json({
-        message: "User already exist from this " + (userExist.email == email ? "email" : "username"),
+        message: "User already exists with this " + (userExist.email === email ? "email" : "username"),
         success: false,
     })
 
@@ -49,11 +68,23 @@ export const register = async (req, res) => {
     }
 
     const token = generateToken(user);
+    res.cookie("token", token);
 
     res.status(201).json({
-        message: "User registered",
+        message: "Organization and owner created",
         success: true,
-        user
+        token,
+        user: {
+            id: user._id,
+            email: user.email,
+            role: user.role,
+            organizationId: user.organizationId
+        },
+        organization: {
+            id: organization._id,
+            name: organization.name,
+            slug: organization.slug
+        }
     })
 
 }
@@ -77,11 +108,18 @@ export const login = async (req, res) => {
 
 
     const token = generateToken(user);
+    res.cookie("token", token);
 
-    res.status(201).json({
+    res.status(200).json({
         message: "User Logged in",
         success: true,
-        user,
+        token,
+        user: {
+            id: user._id,
+            email: user.email,
+            role: user.role,
+            organizationId: user.organizationId
+        }
     })
 
 }
@@ -116,12 +154,17 @@ export const googleAuth = async (req, res) => {
     }
 
     const token = generateToken(user);
+    res.cookie("token", token);
 
     res.status(201).json({
         message: "User Authenticated successfully",
         success: true,
-        user,
-    })
-
-    res.redirect('http://localhost:5173/');
+        token,
+        user: {
+            id: user._id,
+            email: user.email,
+            role: user.role,
+            organizationId: user.organizationId
+        },
+    });
 }
