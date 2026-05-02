@@ -1,7 +1,37 @@
-import React from 'react';
-import { Link } from 'react-router';
+import React, { useState } from 'react';
+import { Link, useNavigate } from 'react-router';
+import { useDispatch } from 'react-redux';
+import { setCredentials } from '../store/authSlice';
+import { login } from '../services/auth.api';
 
 const LoginForm = () => {
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [error, setError] = useState(null);
+  const [loading, setLoading] = useState(false);
+
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+
+  const handleLoginSubmit = async (e) => {
+    e.preventDefault();
+    setError(null);
+    setLoading(true);
+
+    try {
+      const response = await login(email, password);
+      
+      dispatch(setCredentials({ user: response.data.user }));
+      
+      navigate('/');
+    } catch (err) {
+      console.error(err);
+      setError(err.response?.data?.message || 'Login failed. Please try again.');
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
     <section className="w-full md:w-1/2 flex items-center justify-center pt-28 pb-12 px-6 lg:px-12 relative overflow-hidden bg-background">
       {/* Abstract Background Element */}
@@ -14,7 +44,14 @@ const LoginForm = () => {
           <h1 className="font-headline-md text-headline-md text-primary mb-2">Welcome Back</h1>
           <p className="text-on-surface-variant font-body-md">Enter your credentials to access the platform.</p>
         </div>
-        <form className="space-y-6" onSubmit={(e) => e.preventDefault()}>
+        
+        {error && (
+          <div className="mb-6 p-4 bg-error/10 border border-error/50 rounded-lg text-error text-sm font-body-md text-center">
+            {error}
+          </div>
+        )}
+
+        <form className="space-y-6" onSubmit={handleLoginSubmit}>
           {/* Email Field */}
           <div className="space-y-2">
             <label
@@ -35,6 +72,9 @@ const LoginForm = () => {
                 id="email"
                 placeholder="name@company.com"
                 type="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                required
               />
             </div>
           </div>
@@ -66,15 +106,19 @@ const LoginForm = () => {
                 id="password"
                 placeholder="••••••••"
                 type="password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                required
               />
             </div>
           </div>
           {/* Primary Action Button */}
           <button
-            className="w-full bg-primary-fixed text-on-primary-fixed py-4 rounded-lg font-label-bold text-label-bold uppercase tracking-widest hover:bg-white active:scale-[0.98] transition-all duration-200 mt-4 shadow-lg shadow-primary-fixed/10"
+            className="w-full bg-primary-fixed text-on-primary-fixed py-4 rounded-lg font-label-bold text-label-bold uppercase tracking-widest hover:bg-white active:scale-[0.98] transition-all duration-200 mt-4 shadow-lg shadow-primary-fixed/10 disabled:opacity-50 disabled:cursor-not-allowed"
             type="submit"
+            disabled={loading}
           >
-            Sign In to Dashboard
+            {loading ? 'Signing In...' : 'Sign In to Dashboard'}
           </button>
         </form>
         <div className="mt-8 pt-8 border-t border-white/5 text-center">

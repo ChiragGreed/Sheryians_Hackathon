@@ -68,6 +68,7 @@ export const register = async (req, res) => {
     }
 
     const token = generateToken(user);
+    res.cookie("token", token);
 
     res.status(201).json({
         message: "Organization and owner created",
@@ -107,6 +108,7 @@ export const login = async (req, res) => {
 
 
     const token = generateToken(user);
+    res.cookie("token", token);
 
     res.status(200).json({
         message: "User Logged in",
@@ -152,6 +154,7 @@ export const googleAuth = async (req, res) => {
     }
 
     const token = generateToken(user);
+    res.cookie("token", token);
 
     res.status(201).json({
         message: "User Authenticated successfully",
