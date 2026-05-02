@@ -2,9 +2,10 @@ import "dotenv/config";
 import http from "http";
 import app from "./src/app.js";
 import connectDB from "./src/config/database.js";
-import initSockets from "./src/sockets/index.js";   
+import { Config } from './src/config/config.js';
+import initSockets from "./src/sockets/index.js";
 
-const PORT = process.env.PORT || 5000;
+const PORT = Config.PORT || process.env.PORT || 5000;
 
 const start = async () => {
   await connectDB();
