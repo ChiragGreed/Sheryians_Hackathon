@@ -1,7 +1,39 @@
-import React from 'react';
-import { Link } from 'react-router';
+import React, { useState } from 'react';
+import { useDispatch } from 'react-redux';
+import { Link, useNavigate } from 'react-router';
+import { registerApi } from '../services/auth.api';
+import { setCredentials } from '../store/authSlice';
 
 const RegisterForm = () => {
+  const [username, setUsername] = useState('');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [organizationName, setOrganizationName] = useState('');
+  const [error, setError] = useState(null);
+  const [loading, setLoading] = useState(false);
+
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+
+  const handleRegisterSubmit = async (e) => {
+    e.preventDefault();
+    setError(null);
+    setLoading(true);
+
+    try {
+      const response = await registerApi({ username, email, password, organizationName });
+      
+      dispatch(setCredentials({ user: response.data.user }));
+      
+      navigate('/');
+    } catch (err) {
+      console.error(err);
+      setError(err.response?.data?.message || 'Login failed. Please try again.');
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
     <section className="w-full md:w-1/2 flex items-center justify-center pt-28 pb-12 px-6 lg:px-12 relative overflow-hidden bg-background">
       {/* Abstract Background Element */}
@@ -14,7 +46,7 @@ const RegisterForm = () => {
           <h1 className="font-headline-md text-headline-md text-primary mb-2">Create Account</h1>
           <p className="text-on-surface-variant font-body-md">Join SolveX to start your journey.</p>
         </div>
-        <form className="space-y-6" onSubmit={(e) => e.preventDefault()}>
+        <form className="space-y-6" onSubmit={handleRegisterSubmit}>
           {/* Username Field */}
           <div className="space-y-2">
             <label
@@ -36,6 +68,8 @@ const RegisterForm = () => {
                 name="fullname"
                 placeholder="John Doe"
                 type="text"
+                value={username}
+                onChange={(e) => setUsername(e.target.value)}
               />
             </div>
           </div>
@@ -60,6 +94,8 @@ const RegisterForm = () => {
                 name="email"
                 placeholder="name@company.com"
                 type="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
               />
             </div>
           </div>
@@ -84,38 +120,35 @@ const RegisterForm = () => {
                 name="password"
                 placeholder="••••••••"
                 type="password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
               />
             </div>
           </div>
-          {/* Role Field */}
+          {/* Organization Name Field */}
           <div className="space-y-2">
             <label
               className="block text-xs text-on-surface-variant uppercase tracking-widest"
-              htmlFor="role"
+              htmlFor="organizationName"
             >
-              Role
+              Organization Name
             </label>
             <div className="relative group">
               <span
                 className="absolute left-4 top-1/2 -translate-y-1/2 material-symbols-outlined text-outline group-focus-within:text-primary-fixed transition-colors"
-                data-icon="badge"
+                data-icon="domain"
               >
-                badge
+                domain
               </span>
-              <select
-                className="w-full bg-surface-container-lowest border border-outline/20 text-on-surface py-2 pl-12 pr-10 rounded-lg focus:ring-1 focus:ring-primary-fixed focus:border-primary-fixed input-focus-glow outline-none transition-all font-body-md appearance-none"
-                id="role"
-                name="role"
-                defaultValue="isOwner"
-              >
-                <option value="isAdmin" className="bg-surface-container-lowest">Admin</option>
-                <option value="isOwner" className="bg-surface-container-lowest">Owner</option>
-                <option value="isAgent" className="bg-surface-container-lowest">Agent</option>
-              </select>
-              {/* Dropdown chevron */}
-              <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-4 text-outline group-focus-within:text-primary-fixed">
-                <span className="material-symbols-outlined text-xl">expand_more</span>
-              </div>
+              <input
+                className="w-full bg-surface-container-lowest border border-outline/20 text-on-surface py-2 pl-12 rounded-lg focus:ring-1 focus:ring-primary-fixed focus:border-primary-fixed input-focus-glow outline-none transition-all font-body-md"
+                id="organizationName"
+                name="organizationName"
+                placeholder="Acme Corp"
+                type="text"
+                value={organizationName}
+                onChange={(e) => setOrganizationName(e.target.value)}
+              />
             </div>
           </div>
           {/* Primary Action Button */}
