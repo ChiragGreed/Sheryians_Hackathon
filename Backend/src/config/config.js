@@ -1,5 +1,9 @@
-import { config } from 'dotenv'
-config();
+import { config } from 'dotenv';
+import { resolve, dirname } from 'path';
+import { fileURLToPath } from 'url';
+
+const __dirname = dirname(fileURLToPath(import.meta.url));
+config({ path: resolve(__dirname, '../../.env') });
 
 if (!process.env.MONGO_URI) {
     throw new Error("Mongo Uri not found in environmental variables")

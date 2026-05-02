@@ -1,5 +1,5 @@
 import { ESCALATION_KEYWORDS } from "../config/constants.js";
-import Ticket from "../models/Ticket.js";
+import Ticket from "../models/ticketModel.js";
 
 export const checkEscalation = (message) => {
   const lower = message.toLowerCase();

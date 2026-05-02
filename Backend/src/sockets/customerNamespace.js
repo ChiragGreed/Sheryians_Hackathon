@@ -1,6 +1,6 @@
-import Ticket from "../models/Ticket.js";
+import Ticket from "../models/ticketModel.js";
 import Message from "../models/Message.js";
-import { generateAIResponse } from "../services/aiService.js";
+import { generateAIResponse } from "../services/gemini.service.js";
 import {
   checkEscalation,
   escalateTicket,
