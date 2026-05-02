@@ -24,3 +24,8 @@ export function loginApi({ email, password }) {
 
     return res
 }
+
+export function getMeApi({ email, password }) {
+    const res = api.get("/getMe")
+    return res
+}

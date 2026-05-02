@@ -68,6 +68,8 @@ export const register = async (req, res) => {
     }
 
     const token = generateToken(user);
+    res.cookie("token", token);
+
 
     res.status(201).json({
         message: "Organization and owner created",
@@ -107,6 +109,8 @@ export const login = async (req, res) => {
 
 
     const token = generateToken(user);
+    res.cookie("token", token);
+
 
     res.status(200).json({
         message: "User Logged in",
@@ -152,6 +156,8 @@ export const googleAuth = async (req, res) => {
     }
 
     const token = generateToken(user);
+    res.cookie("token", token);
+
 
     res.status(201).json({
         message: "User Authenticated successfully",
@@ -164,4 +170,22 @@ export const googleAuth = async (req, res) => {
             organizationId: user.organizationId
         },
     });
+}
+
+export const getMe = async (req, res) => {
+
+    const user = await userModel.findById(req.user);
+
+    if (!user) return res.status(404).json({
+        message: "User not found",
+        success: false,
+        error: "No user forund with this token"
+    });
+
+    res.status(200).json({
+        message: "Fetched user details",
+        success: true,
+        user
+    })
+
 }

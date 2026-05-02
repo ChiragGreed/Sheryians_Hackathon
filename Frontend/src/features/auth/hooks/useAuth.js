@@ -1,4 +1,4 @@
-import { loginApi, registerApi } from "../services/auth.api.js";
+import { getMeApi, loginApi, registerApi } from "../services/auth.api.js";
 import { setLoading, setUser } from "../State/authSlice.js";
 
 const useAuth = () => {
