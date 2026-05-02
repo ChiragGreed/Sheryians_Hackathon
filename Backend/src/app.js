@@ -1,6 +1,7 @@
 import express from 'express';
 import cookieParser from 'cookie-parser';
 import authRouter from './routes/authRouter.js';
+import chatRouter from "./routes/chatRouter.js";
 import uploadRoutes from "./routes/uploadRouter.js";
 import aiRoutes from "./routes/aiRoutes.js";
 import passport from 'passport';
@@ -32,6 +33,7 @@ passport.use(new GoogleStrategy({
 
 
 app.use('/api/auth', authRouter);
+app.use("/api/chat", chatRouter);
 app.use("/api", uploadRoutes);
 app.use("/api", aiRoutes);
 
