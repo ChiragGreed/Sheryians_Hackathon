@@ -14,11 +14,14 @@ const chunkText = (text) => {
 };
 
 
-export const processText = async (text, orgId) => {
+export const processText = async (text, organizationId) => {
     try {
         const chunks = chunkText(text);
 
         const vectors = [];
+
+        console.log("LEARN TEXT:", text);
+        console.log("Vectors count:", vectors.length);
 
         for (let chunk of chunks) {
         const embedding = await getEmbedding(chunk);
@@ -31,7 +34,7 @@ export const processText = async (text, orgId) => {
             values: embedding,
             metadata: {
                 text: chunk,
-                orgId,
+                organizationId,
             },
             });
         }
@@ -44,7 +47,6 @@ export const processText = async (text, orgId) => {
         }
 
         await index.upsert({
-            namespace: "default",
             records: vectors.map(v => ({
                 id: v.id,
                 values: v.values,

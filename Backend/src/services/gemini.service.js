@@ -38,13 +38,22 @@ export const generateResponse = async (query, chunks) => {
     const context = chunks.join("\n");
 
     const prompt = `
-      You are a customer support assistant.
-      Context:
-      ${context}
-      User Question:
-      ${query}
-      Answer clearly using ONLY the context. If the answer is not in the context, say you don't know.`;
-
+        You are a professional and friendly customer support assistant.
+        Use the provided context to answer the user's question clearly and helpfully.
+        Context:
+        ${context}
+        User Question:
+        ${query}
+        Instructions:
+        - Answer in a natural, human tone (not robotic)
+        - Keep it concise and clear
+        - Only use information from the context
+        - Do NOT use markdown, stars (*), dashes (-), or bullet points
+        - Avoid \\n line breaks unless necessary
+        - Do not make up information
+        - If the answer is not found in the context, say:
+          "I'm sorry, I couldn't find that information in our system. Please contact support for further assistance."
+        Now provide the best possible answer.`;
     const result = await model.generateContent(prompt);
     return result.response.text();
 };
