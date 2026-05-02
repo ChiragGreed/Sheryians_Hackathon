@@ -3,21 +3,28 @@ import { generateAIResponse } from "../services/gemini.service.js";
 import { processText } from "../services/pipeline.service.js";
 import mongoose from "mongoose";
 import ticketModel from "../models/ticketModel.js";
+import userModel from "../models/userModel.js";
 
 export const handleAI = async (req, res) => {
     try {
-        const { query,organizationId } = req.body;
+        const { query, visitorId } = req.body;
+        const organizationId = req.user.organizationId;
 
-        if (!query || !organizationId) {
-        return res.status(400).json({ error: "Query and organization ID are required" });
+        
+        if (!query || !userId) {
+            return res.status(400).json({ 
+                error: "Query and user ID are required"
+            });
         }
-
+        
         const chunks = await searchChunks(query, organizationId);
+
 
         if (chunks.length === 0) {
         await ticketModel.create({
             query,
-            organizationId,
+            userId,
+            visitorId: visitorId || "anonymous-user",
         });
 
         return res.json({
@@ -77,7 +84,7 @@ export const respondTicket = async (req, res) => {
             ${response}
             `;
 
-await processText(learnText, ticket.organizationId);
+await processText(learnText, ticket.userId);
 
         res.json({
         message: "Ticket resolved and learned successfully",

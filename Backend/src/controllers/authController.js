@@ -168,3 +168,21 @@ export const googleAuth = async (req, res) => {
         },
     });
 }
+
+export const getMe = async (req, res) => {
+
+    const user = await userModel.findById(req.user);
+
+    if (!user) return res.status(404).json({
+        message: "User not found",
+        success: false,
+        error: "No user forund with this token"
+    });
+
+    res.status(200).json({
+        message: "Fetched user details",
+        success: true,
+        user
+    })
+
+}
