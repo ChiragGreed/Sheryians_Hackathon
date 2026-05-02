@@ -1,26 +1,31 @@
-import axios from 'axios'
+import axios from 'axios';
 
 const api = axios.create({
     baseURL: "http://localhost:9010/api/auth",
     withCredentials: true
 })
 
-export function register(fullname, email, password, role){
+export function registerApi({ username, email, password, organizationName }) {
     const res = api.post("/register", {
-        fullname,
+        username,
         email,
         password,
-        role
+        organizationName
     })
 
     return res
 }
 
-export function login(email, password){
+export function loginApi({ email, password }) {
     const res = api.post("/login", {
         email,
         password
     })
 
+    return res
+}
+
+export function getMeApi({ email, password }) {
+    const res = api.get("/getMe")
     return res
 }

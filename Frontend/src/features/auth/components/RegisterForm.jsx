@@ -33,7 +33,7 @@ const RegisterForm = () => {
               <input
                 className="w-full bg-surface-container-lowest border border-outline/20 text-on-surface py-2 pl-12 rounded-lg focus:ring-1 focus:ring-primary-fixed focus:border-primary-fixed input-focus-glow outline-none transition-all font-body-md"
                 id="username"
-                name="fullname"
+                name="username"
                 placeholder="John Doe"
                 type="text"
               />
