@@ -20,6 +20,7 @@
     "dns": "^0.2.2",
     "dotenv": "^17.4.2",
     "express": "^5.2.1",
+    "express-rate-limit": "^8.4.1",
     "express-validator": "^7.3.2",
     "jsonwebtoken": "^9.0.3",
     "mongoose": "^9.6.1",
@@ -28,6 +29,7 @@
     "passport-google-oauth20": "^2.0.0",
     "pdf-parse": "^2.4.5",
     "pdfjs-dist": "^5.7.284",
+    "slugify": "^1.6.9",
     "socket.io": "^4.8.3",
     "socket.io-client": "^4.8.3"
   }

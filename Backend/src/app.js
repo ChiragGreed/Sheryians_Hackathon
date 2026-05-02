@@ -9,10 +9,9 @@ import GoogleStrategy from 'passport-google-oauth20';
 import { Config } from './config/config.js';
 import cors from 'cors';
 
-
 const app = express();
-app.use(express.json());
 
+app.use(express.json());
 
 app.use(cors({
     origin: 'http://localhost:5173',
@@ -29,13 +28,12 @@ passport.use(new GoogleStrategy({
     callbackURL: `http://localhost:${Config.PORT}/api/auth/google/callback`,
 }, (_, __, profile, done) => {
     return done(null, profile);
-}))
+}));
 
-
+// Routes
 app.use('/api/auth', authRouter);
 app.use("/api/chat", chatRouter);
 app.use("/api", uploadRoutes);
 app.use("/api", aiRoutes);
-
 
 export default app;

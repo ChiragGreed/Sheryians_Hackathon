@@ -1,5 +1,5 @@
 import { searchChunks } from "../services/search.service.js";
-import { generateResponse } from "../services/gemini.service.js";
+import { generateAIResponse } from "../services/gemini.service.js";
 import { processText } from "../services/pipeline.service.js";
 import mongoose from "mongoose";
 import ticketModel from "../models/ticketModel.js";
@@ -26,7 +26,7 @@ export const handleAI = async (req, res) => {
         });
         }
 
-        const answer = await generateResponse(query, chunks);
+        const answer = await generateAIResponse({ query, chunks });
 
         res.json({
             answer,
