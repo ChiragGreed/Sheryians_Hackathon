@@ -5,7 +5,7 @@ const userSchema = new mongoose.Schema({
     username: {
         type: String,
         unique: true,
-        required: [true, "usernname is required"]
+        required: [true, "username is required"]
     },
     email: {
         type: String,
@@ -32,7 +32,7 @@ const userSchema = new mongoose.Schema({
     organizationId: {
         type: mongoose.Schema.Types.ObjectId,
         ref: "organizations",
-        required: true
+        required: false
     }
 
 })
