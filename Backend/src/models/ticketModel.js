@@ -1,29 +1,47 @@
 import mongoose from "mongoose";
+import { DUMMY_ORG_ID } from "../config/constants.js";
 
 const ticketSchema = new mongoose.Schema(
-    {
-        query: {
-            type: String,
-            required: true,
-        },
-        visitorId: {
-            type: String,
-            required: true,
-        },
-        status: {
-            type: String,
-            enum: ["open", "resolved"],
-            default: "open",
-        },
-        organizationId: {
-            type: String,
-            default: "org1",
-        },
-        response: {
-            type: String, 
-        },
+  {
+    // 🔹 User question (AI fallback input)
+    query: {
+      type: String,
+      required: true,
     },
-    { timestamps: true }
+
+    // 🔹 Admin response
+    response: {
+      type: String,
+    },
+
+    // 🔹 Who asked (for tracking user/session)
+    visitorId: {
+      type: String,
+      required: true,
+    },
+
+    // 🔹 Organization (multi-tenant support)
+    organizationId: {
+      type: mongoose.Schema.Types.ObjectId, // ✅ upgraded
+      default: DUMMY_ORG_ID,
+      required: true,
+    },
+
+    // 🔹 Ticket status
+    status: {
+      type: String,
+      enum: ["open", "resolved", "escalated", "closed"],
+      default: "open",
+    },
+
+    // 🔹 Escalation flag
+    isEscalated: {
+      type: Boolean,
+      default: false,
+    },
+  },
+  { timestamps: true }
 );
 
-export default mongoose.model("Ticket", ticketSchema);
+const Ticket = mongoose.model("Ticket", ticketSchema);
+export default Ticket;
