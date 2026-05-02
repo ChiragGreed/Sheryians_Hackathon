@@ -26,9 +26,29 @@ export const register = async (req, res) => {
         success: false,
     })
 
-    const user = await userModel.create({ fullname, email, password,  role });
+    const slug = await generateUniqueSlug(organizationName);
+    if (!slug) {
+        return res.status(500).json({ message: "Could not generate a unique organization slug. Please try a different organization name.", success: false });
+    }
 
-    tokenGeneration(user, res);
+    const session = await mongoose.startSession();
+    let organization, user;
+    try {
+        await session.withTransaction(async () => {
+            [organization] = await organizationModel.create([{ name: organizationName, slug }], { session });
+            [user] = await userModel.create([{ username, email, password, role: "Owner", organizationId: organization._id }], { session });
+        });
+    } catch (err) {
+        if (err.code === 11000) {
+            const field = err.keyPattern ? Object.keys(err.keyPattern)[0] : "field";
+            return res.status(400).json({ message: `A user or organization with this ${field} already exists.`, success: false });
+        }
+        throw err;
+    } finally {
+        session.endSession();
+    }
+
+    const token = generateToken(user);
 
     res.status(201).json({
         message: "User registered",
@@ -56,7 +76,7 @@ export const login = async (req, res) => {
     })
 
 
-    tokenGeneration(user, res);
+    const token = generateToken(user);
 
     res.status(201).json({
         message: "User Logged in",
@@ -72,9 +92,30 @@ export const googleAuth = async (req, res) => {
 
     let user = await userModel.findOne({ email });
 
-    if (!user) user = await userModel.create({ fullname: displayName, email, googleId: id });
+    if (!user) {
+        const slug = await generateUniqueSlug(displayName);
+        if (!slug) {
+            return res.status(500).json({ message: "Could not generate a unique organization slug.", success: false });
+        }
 
-    tokenGeneration(user, res);
+        const session = await mongoose.startSession();
+        try {
+            await session.withTransaction(async () => {
+                const [organization] = await organizationModel.create([{ name: displayName, slug }], { session });
+                [user] = await userModel.create([{ username: displayName, email, organizationId: organization._id, googleId: id }], { session });
+            });
+        } catch (err) {
+            if (err.code === 11000) {
+                const field = err.keyPattern ? Object.keys(err.keyPattern)[0] : "field";
+                return res.status(400).json({ message: `A user or organization with this ${field} already exists.`, success: false });
+            }
+            return res.status(500).json({ message: "Failed to create user account.", success: false });
+        } finally {
+            session.endSession();
+        }
+    }
+
+    const token = generateToken(user);
 
     res.status(201).json({
         message: "User Authenticated successfully",
