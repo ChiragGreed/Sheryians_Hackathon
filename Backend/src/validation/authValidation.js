@@ -12,9 +12,12 @@ const validationHandler = (req, res, next) => {
 
 
 export const registerValidator = [
-    body("fullname")
+    body("username")
+        .trim()
+        .notEmpty()
+        .withMessage("username is required")
         .isLength({ min: 3 })
-        .withMessage("Fullname must be at least 3 characters long"),
+        .withMessage("username must be at least 3 characters long"),
 
     body("email")
         .isEmail()
@@ -26,6 +29,12 @@ export const registerValidator = [
         .matches(/\d/)
         .withMessage("Password must contain a number"),
 
+    body("organizationName")
+        .trim()
+        .notEmpty()
+        .withMessage("organizationName is required")
+        .isLength({ min: 2, max: 100 })
+        .withMessage("organizationName must be between 2 and 100 characters"),
 
     validationHandler
 

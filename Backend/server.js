@@ -1,9 +1,12 @@
+import app from './src/app.js';
+import { Config } from './src/config/config.js';
+import ConntectToDb from './src/config/database.js';
 import "dotenv/config";
 import http from "http";
 import app from "./src/app.js";
 import connectDB from "./src/config/database.js";
-import { Config } from './src/config/config.js';
-import initSockets from "./src/sockets/index.js";
+import initSockets from "./src/sockets/index.js";   
+
 
 const PORT = Config.PORT || process.env.PORT || 5000;
 
