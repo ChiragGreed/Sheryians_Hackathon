@@ -1,5 +1,5 @@
-import { config } from 'dotenv'
-config();
+import { config } from 'dotenv';
+config({ path: '../.env' });
 
 if (!process.env.MONGO_URI) {
     throw new Error("Mongo Uri not found in environmental variables")

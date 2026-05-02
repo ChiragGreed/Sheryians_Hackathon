@@ -12,9 +12,9 @@ const validationHandler = (req, res, next) => {
 
 
 export const registerValidator = [
-    body("fullname")
+    body("username")
         .isLength({ min: 3 })
-        .withMessage("Fullname must be at least 3 characters long"),
+        .withMessage("username must be at least 3 characters long"),
 
     body("email")
         .isEmail()

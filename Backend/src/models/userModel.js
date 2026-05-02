@@ -2,10 +2,10 @@ import mongoose from "mongoose";
 import bcrypt from 'bcryptjs'
 
 const userSchema = new mongoose.Schema({
-    fullname: {
+    username: {
         type: String,
         unique: true,
-        required: [true, "Fullname is required"]
+        required: [true, "usernname is required"]
     },
     email: {
         type: String,
@@ -22,11 +22,17 @@ const userSchema = new mongoose.Schema({
     googleId: {
         type: String,
         unique: true,
+        sparse: true
     },
     role: {
         type: String,
-        default: "isOwner",
-        enum: ["isAdmin", "isOwner", "isAgent"]
+        default: "Owner",
+        enum: ["Owner", "Admin", "Agent"]
+    },
+    organizationId: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "organizations",
+        required: true
     }
 
 })
