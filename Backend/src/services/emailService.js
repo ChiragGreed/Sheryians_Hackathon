@@ -51,8 +51,9 @@ export const sendAgentInvitationEmail = async (recipientEmail, organizationName,
     try {
         const acceptanceLink = `${frontendUrl}/agent/accept-invitation?token=${invitationToken}`;
 
+        // FIX: removed erroneous spaces in opening div tag: "< div style = " -> "<div style="
         const html = `
-            < div style = "background:#0a0a0a; padding: 40px 20px; font-family: 'Helvetica Neue', Helvetica, sans-serif;" >
+            <div style="background:#0a0a0a; padding: 40px 20px; font-family: 'Helvetica Neue', Helvetica, sans-serif;">
                 <div style="max-width:600px; width:100%; margin:0 auto; background:#111; border:1px solid #1a1a1a; border-radius:4px; overflow:hidden; box-shadow:0 0 60px rgba(180,255,80,0.07);">
 
                     <!-- Header -->
@@ -93,8 +94,8 @@ export const sendAgentInvitationEmail = async (recipientEmail, organizationName,
                     </div>
 
                 </div>
-  </div >
-    `;
+            </div>
+        `;
 
         const data = await sendEmail(
             recipientEmail,
@@ -117,18 +118,42 @@ export const sendAgentInvitationEmail = async (recipientEmail, organizationName,
  */
 export const sendAgentAcceptanceConfirmation = async (recipientEmail, organizationName) => {
     try {
+        const loginUrl = Config.FRONTEND_URL || "http://localhost:5173";
+
         const html = `
-            <div style="font-family: Arial, sans-serif; line-height: 1.6; color: #333;">
-                <h2>Welcome!</h2>
-                <p>Thank you for accepting the invitation to join <strong>${organizationName}</strong>.</p>
-                <p>You have been successfully assigned the Agent role and can now:</p>
-                <ul>
-                    <li>Access the organization's resources</li>
-                    <li>Collaborate with other team members</li>
-                    <li>Manage customer interactions</li>
-                </ul>
-                <p>Log in to get started: <a href="${Config.FRONTEND_URL || "http://localhost:5173"}">Login</a></p>
-                <p>If you have any questions, please contact the organization administrator.</p>
+            <div style="background:#0a0a0a; padding: 40px 20px; font-family: 'Helvetica Neue', Helvetica, sans-serif;">
+                <div style="max-width:600px; width:100%; margin:0 auto; background:#111; border:1px solid #1a1a1a; border-radius:4px; overflow:hidden; box-shadow:0 0 60px rgba(180,255,80,0.07);">
+
+                    <!-- Header -->
+                    <div style="background:#0d0d0d; border-bottom:1px solid #1e1e1e; padding:24px 40px;">
+                        <span style="color:#b4ff50; font-size:20px; font-weight:800; letter-spacing:-0.5px;">SolveX</span>
+                    </div>
+
+                    <!-- Body -->
+                    <div style="padding:48px 40px;">
+                        <h2 style="color:#fff; font-size:28px; font-weight:800; letter-spacing:-1px; line-height:1.2; margin:0 0 20px 0; text-transform:uppercase;">Welcome to<br /><span style="color:#b4ff50;">${organizationName}!</span></h2>
+
+                        <p style="color:#888; font-size:15px; line-height:1.7; margin:0 0 8px 0;">You have been successfully added as an Agent. You can now:</p>
+
+                        <ul style="color:#888; font-size:15px; line-height:2; padding-left:20px; margin:0 0 36px 0;">
+                            <li>Access the organization's resources</li>
+                            <li>Collaborate with other team members</li>
+                            <li>Manage customer interactions</li>
+                        </ul>
+
+                        <a href="${loginUrl}" style="display:inline-block; padding:14px 32px; background:#b4ff50; color:#0a0a0a; text-decoration:none; border-radius:3px; font-size:12px; font-weight:800; letter-spacing:2px; text-transform:uppercase;">Login Now →</a>
+
+                        <p style="color:#444; font-size:11px; line-height:1.6; margin:36px 0 0 0; border-top:1px solid #1a1a1a; padding-top:24px;">
+                            If you have any questions, please contact the organization administrator.
+                        </p>
+                    </div>
+
+                    <!-- Footer -->
+                    <div style="background:#0d0d0d; border-top:1px solid #1a1a1a; padding:16px 40px;">
+                        <span style="color:#333; font-size:11px;">© SolveX · AI Customer Support</span>
+                    </div>
+
+                </div>
             </div>
         `;
 

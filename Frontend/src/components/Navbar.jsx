@@ -11,17 +11,20 @@ const Navbar = () => {
         <nav className="hidden md:flex items-center gap-8">
           <Link
             className="text-on-surface-variant font-medium hover:text-primary-fixed transition-colors duration-200 font-label-bold"
-            to="/"
+            to="/about"
           >
-            Home
+            About us
           </Link>
           <Link
             className="text-on-surface-variant font-medium hover:text-primary-fixed transition-colors duration-200 font-label-bold"
-            to="#"
+            to="services"
           >
-            Support
+            Services 
           </Link>
         </nav>
+        <button className='inline-flex items-center gap-2 px-4 py-2 rounded-full border border-primary-fixed/30 bg-primary-fixed/5'>
+          Get in touch
+        </button>
         <div className="md:hidden">
           <span
             className="material-symbols-outlined text-primary-fixed cursor-pointer"

@@ -178,8 +178,9 @@ export const acceptAgentInvitation = async (req, res) => {
 
         const session = await mongoose.startSession();
 
+        let newUser;
+
         try {
-            let newUser;
             await session.withTransaction(async () => {
                 // Create new user with Agent role
                 [newUser] = await userModel.create([{
@@ -201,43 +202,45 @@ export const acceptAgentInvitation = async (req, res) => {
                     { session }
                 );
             });
-
-            // Send confirmation email
-            const organization = await organizationModel.findById(invitation.organizationId);
-            await sendAgentAcceptanceConfirmation(newUser.email, organization.name);
-
-            // Generate JWT token
-            const jwtToken = JWT.sign(
-                {
-                    userId: newUser._id,
-                    organizationId: newUser.organizationId,
-                    role: newUser.role
-                },
-                Config.JWT_SECRET,
-                { expiresIn: "7d" }
-            );
-
-            res.cookie("token", jwtToken);
-
-            res.status(200).json({
-                success: true,
-                message: "Invitation accepted successfully",
-                token: jwtToken,
-                user: {
-                    id: newUser._id,
-                    username: newUser.username,
-                    email: newUser.email,
-                    role: newUser.role,
-                    organizationId: newUser.organizationId
-                }
-            });
-
-        } catch (error) {
-            session.endSession();
-            throw error;
         } finally {
+            // FIX: only end session once, in finally block
             session.endSession();
         }
+
+        // Send confirmation email
+        const organization = await organizationModel.findById(invitation.organizationId);
+        await sendAgentAcceptanceConfirmation(newUser.email, organization.name);
+
+        // Generate JWT token
+        const jwtToken = JWT.sign(
+            {
+                userId: newUser._id,
+                organizationId: newUser.organizationId,
+                role: newUser.role
+            },
+            Config.JWT_SECRET,
+            { expiresIn: "7d" }
+        );
+
+        res.cookie("token", jwtToken, {
+            httpOnly: true,
+            secure: process.env.NODE_ENV === "production",
+            sameSite: "lax",
+            maxAge: 7 * 24 * 60 * 60 * 1000 // 7 days
+        });
+
+        res.status(200).json({
+            success: true,
+            message: "Invitation accepted successfully",
+            token: jwtToken,
+            user: {
+                id: newUser._id,
+                username: newUser.username,
+                email: newUser.email,
+                role: newUser.role,
+                organizationId: newUser.organizationId
+            }
+        });
 
     } catch (error) {
         console.error("Error in acceptAgentInvitation:", error);
@@ -311,7 +314,8 @@ export const verifyInvitationToken = async (req, res) => {
  */
 export const getOrganizationInvitations = async (req, res) => {
     try {
-        const adminId = req.user;
+        // FIX: was req.user (object), should be req.user.userId
+        const adminId = req.user.userId;
 
         const admin = await userModel.findById(adminId);
 
@@ -348,7 +352,8 @@ export const getOrganizationInvitations = async (req, res) => {
  */
 export const cancelInvitation = async (req, res) => {
     try {
-        const adminId = req.user;
+        // FIX: was req.user (object), should be req.user.userId
+        const adminId = req.user.userId;
         const { invitationId } = req.params;
 
         const admin = await userModel.findById(adminId);

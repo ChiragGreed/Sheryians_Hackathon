@@ -4,7 +4,7 @@ const StatsSection = () => {
   return (
     <section className="w-full py-20 px-6 lg:px-12 bg-[#081800] border-y border-primary-fixed/20 relative overflow-hidden">
       {/* Background patterns */}
-      <div className="absolute inset-0 opacity-10" style={{ backgroundImage: 'radial-gradient(circle at 2px 2px, #96fc30 1px, transparent 0)', backgroundSize: '32px 32px' }}></div>
+      <div className="absolute inset-0 opacity-10" style={{ backgroundImage: 'radial-gradient(circle at 2px 2px, #00E87A 1px, transparent 0)', backgroundSize: '32px 32px' }}></div>
       
       <div className="max-w-7xl mx-auto relative z-10 flex flex-col items-center">
         <h2 className="font-headline-lg text-2xl md:text-4xl text-center text-primary-fixed uppercase mb-16 max-w-2xl">

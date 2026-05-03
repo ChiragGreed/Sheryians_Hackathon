@@ -1,5 +1,5 @@
 import React from 'react';
-import { Link, useLocation } from 'react-router';
+import { Link, useLocation, useNavigate } from 'react-router';
 
 // Left navigation sidebar — matches image 2 style
 // Props (to be wired later): user, onLogout
@@ -12,14 +12,19 @@ const NAV_ITEMS = [
 const Sidebar = ({ onLogout = () => {} }) => {
   const location = useLocation();
 
+  const navigate = useNavigate()
+
   return (
     <aside className="w-52 flex-shrink-0 flex flex-col bg-surface-container-lowest border-r border-outline/10 h-full">
 
       {/* ── Brand badge ─────────────────────────────────────────── */}
       <div className="px-4 py-5 bord  er-b border-outline/10">
-        <div className="flex items-center gap-2 mb-0.5">
+        <div
+          onClick={() => navigate("/")}
+          className="flex items-center gap-2 mb-0.5 cursor-pointer"
+        >
           <span className="w-2 h-2 rounded-full bg-primary-fixed animate-pulse flex-shrink-0" />
-          <span className="font-headline-md text-sm text-on-surface">Core Terminal</span>
+          <span className="font-headline-md text-xl font-semibold text-on-surface">SolveX</span>
         </div>
         <p className="text-[10px] text-on-surface-variant font-label-bold uppercase tracking-widest pl-4">
           v2.0.4 · Online
@@ -76,13 +81,6 @@ const Sidebar = ({ onLogout = () => {} }) => {
           <span className="material-symbols-outlined" style={{ fontSize: '18px' }}>help_outline</span>
           Support
         </Link>
-        <button
-          onClick={onLogout}
-          className="w-full flex items-center gap-3 px-3 py-2 rounded-lg text-error hover:bg-error/5 transition-all text-sm font-body-md"
-        >
-          <span className="material-symbols-outlined" style={{ fontSize: '18px' }}>logout</span>
-          Log Out
-        </button>
       </div>
     </aside>
   );
