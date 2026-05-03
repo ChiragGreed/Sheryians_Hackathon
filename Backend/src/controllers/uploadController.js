@@ -61,7 +61,7 @@ export const uploadPDF = async (req, res) => {
 export const uploadText = async (req, res) => {
     try {
         const { text } = req.body;
-        const organizationId = req.user?.organizationId;
+        const organizationId= req.user?.organizationId;
 
         if (!text) {
         return res.status(400).json({ error: "Text is required" });

@@ -10,13 +10,14 @@ export const handleAI = async (req, res) => {
         const { query, visitorId } = req.body;
         const organizationId = req.user?.organizationId;
 
-        if (!query || !organizationId) {
+    if (!query || !organizationId) {
         return res.status(400).json({
             error: "Query and organization ID are required",
         });
-        }
+    }
 
-        const chunks = await searchChunks(query, organizationId);
+    const chunks = await searchChunks(query, organizationId);
+
 
         if (chunks.length === 0) {
         const ticket = await ticketModel.create({
