@@ -6,10 +6,10 @@ const transporter = nodemailer.createTransport({
     service: 'gmail',
     auth: {
         type: 'OAuth2',
-        user: process.env.GOOGLE_USER,
-        clientId: process.env.GOOGLE_CLIENT_ID,
-        clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-        refreshToken: process.env.GOOGLE_REFRESH_TOKEN
+        user: Config.GOOGLE_USER,
+        clientId: Config.GOOGLE_CLIENT_ID,
+        clientSecret: Config.GOOGLE_CLIENT_SECRET,
+        refreshToken: Config.GOOGLE_REFRESH_TOKEN
     }
 });
 
@@ -34,7 +34,7 @@ export const sendAgentInvitationEmail = async (recipientEmail, organizationName,
         const acceptanceLink = `${frontendUrl}/accept-invitation?token=${invitationToken}`;
 
         const mailOptions = {
-            from: process.env.EMAIL_USER,
+            from: Config.GOOGLE_USER,
             to: recipientEmail,
             subject: `You're invited to join ${organizationName} as an Agent`,
             html: `
@@ -73,7 +73,7 @@ export const sendAgentInvitationEmail = async (recipientEmail, organizationName,
 export const sendAgentAcceptanceConfirmation = async (recipientEmail, organizationName) => {
     try {
         const mailOptions = {
-            from: process.env.EMAIL_USER,
+            from: Config.GOOGLE_USER,
             to: recipientEmail,
             subject: `Welcome to ${organizationName}!`,
             html: `

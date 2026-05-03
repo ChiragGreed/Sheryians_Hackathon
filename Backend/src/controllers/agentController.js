@@ -1,4 +1,4 @@
-import agentInvitationModel from "../models/InvitationModel.js";
+import InvitationModel from "../models/InvitationModel.js";
 import userModel from "../models/userModel.js";
 import organizationModel from "../models/organizationModel.js";
 import { sendAgentInvitationEmail, sendAgentAcceptanceConfirmation } from "../services/emailService.js";
@@ -74,7 +74,7 @@ export const sendAgentInvitation = async (req, res) => {
         }
 
         // Create invitation
-        const invitation = await agentInvitationModel.create({
+        const invitation = await InvitationModel.create({
             email: agentEmail,
             organizationId: admin.organizationId,
             invitedBy: adminId
