@@ -23,7 +23,6 @@ const App = () => {
           element: <Home />
         },
         {
-        {
           element: <PublicRoute />,
           children: [
             {
