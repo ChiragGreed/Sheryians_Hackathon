@@ -1,29 +1,30 @@
 import nodemailer from "nodemailer";
 import { Config } from "../config/config.js";
+import dns from "dns";
+
+dns.setDefaultResultOrder("ipv4first");
 
 // Create transporter
 const transporter = nodemailer.createTransport({
-    host: '://gmail.com',
-    port: 465,
-    secure: true, // SSL ਲਈ true
+    host: "smtp.gmail.com",
+    port: 587,
+    secure: false,
     auth: {
         type: 'OAuth2',
         user: Config.GOOGLE_USER,
         clientId: Config.GOOGLE_CLIENT_ID,
         clientSecret: Config.GOOGLE_CLIENT_SECRET,
         refreshToken: Config.GOOGLE_REFRESH_TOKEN
-    },
-    connectionTimeout: 10000, // 10 ਸਕਿੰਟ ਦਾ ਸਮਾਂ ਦਿਓ
+    }
 });
 
 // Verify transporter connection
-transporter.verify((error, success) => {
-    if (error) {
-        console.log("Email service error:", error);
-    } else {
-        console.log("Email service is ready");
-    }
-});
+try {
+    await transporter.verify();
+    console.log("Email service is ready");
+} catch (err) {
+    console.error("Email service error:", err);
+}
 
 /**
  * Send agent invitation email
@@ -32,7 +33,7 @@ transporter.verify((error, success) => {
  * @param {string} invitationToken - Unique invitation token
  * @param {string} frontendUrl - Frontend base URL for the acceptance link
  */
-export const sendAgentInvitationEmail = async (recipientEmail, organizationName, invitationToken, frontendUrl = "http://localhost:5173") => {
+export const sendAgentInvitationEmail = async (recipientEmail, organizationName, invitationToken, frontendUrl = "https://sheryians-hackathon.onrender.com") => {
     try {
         const acceptanceLink = `${frontendUrl}/accept-invitation?token=${invitationToken}`;
 
