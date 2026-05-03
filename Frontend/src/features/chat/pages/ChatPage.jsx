@@ -1,3 +1,4 @@
+import { getSessionId } from '../utils/session';
 import React from 'react';
 import { useSelector } from 'react-redux';
 import ChatSidebar from '../components/ChatSidebar';
@@ -20,6 +21,7 @@ const ChatPage = () => {
     sendTyping,
   } = useChat(token);
 
+ 
   return (
     <div className="w-full h-screen flex bg-background overflow-hidden">
       {/* Panel 1 — Left navigation sidebar */}
@@ -41,6 +43,8 @@ const ChatPage = () => {
           {error}
         </div>
       )}
+      {/* Panel 3 — Active chat */}
+      <ChatWindow/>
     </div>
   );
 };
