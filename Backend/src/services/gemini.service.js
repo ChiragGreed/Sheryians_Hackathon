@@ -34,14 +34,16 @@ const buildHistory = async (ticketId) => {
 // =============================
 // 🔥 EMBEDDING FUNCTION
 // =============================
-export const getEmbedding = async (text) => {
+// gemini.service.js
+
+// Add a taskType parameter with a default
+export const getEmbedding = async (text, taskType = TaskType.RETRIEVAL_DOCUMENT) => {
   try {
     const result = await embeddingModel.embedContent({
       content: { parts: [{ text }] },
-      taskType: TaskType.RETRIEVAL_DOCUMENT,
+      taskType,                        // ← now dynamic
       outputDimensionality: 768,
     });
-
     return result.embedding.values;
   } catch (err) {
     console.error("❌ Embedding Error:", err);
