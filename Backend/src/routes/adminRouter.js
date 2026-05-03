@@ -14,7 +14,7 @@ const adminRouter = express.Router();
 adminRouter.post("/invite", verifyToken, sendAgentInvitation);
 
 // Accept agent invitation (Public route with token)
-adminRouter.post("/accept-invitation", acceptAgentInvitation);
+adminRouter.get("/accept-invitation", acceptAgentInvitation);
 
 // Verify invitation token (Public route with token)
 adminRouter.get("/verify-token", verifyInvitationToken);
