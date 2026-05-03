@@ -11,8 +11,12 @@ import { Config } from './config/config.js';
 import cors from 'cors';
 import adminRouter from './routes/adminRouter.js';
 import ticketRouter from './routes/ticketRouter.js';
+import integrationRouter from './routes/integrationRouter.js';
 
 const app = express();
+
+const publicFile = path.join(__dirname, "../", "public/dist")
+
 
 app.use(express.json());
 
@@ -22,6 +26,8 @@ app.use(cors({
 }));
 
 app.use(cookieParser());
+
+app.use(express.static(publicFile))
 
 app.use(passport.initialize());
 
@@ -39,6 +45,10 @@ app.use("/api/chat", chatRouter);
 app.use("/api", uploadRoutes);
 app.use("/api/ai", aiRoutes);
 app.use("/api/agent", adminRouter);
-app.use("/api/tickets",ticketRouter)
+app.use("/api/tickets", ticketRouter)
+
+
+app.use('/', integrationRouter);
+
 
 export default app;
