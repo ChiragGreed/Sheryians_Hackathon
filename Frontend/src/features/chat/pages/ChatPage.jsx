@@ -1,7 +1,6 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
-import ChatSidebar from '../components/ChatSidebar';
-import ThreadList from '../components/ThreadList';
+import ChatSidebar from '../../../components/Sidebar';
 import ChatWindow from '../components/ChatWindow';
 import { useChat } from '../hooks/useChat';
 
@@ -42,8 +41,6 @@ const ChatPage = () => {
           {error}
         </div>
       )}
-      {/* Panel 3 — Active chat */}
-      <ChatWindow/>
     </div>
   );
 };

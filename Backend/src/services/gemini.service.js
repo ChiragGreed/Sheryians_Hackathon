@@ -34,14 +34,16 @@ const buildHistory = async (ticketId) => {
 // =============================
 // 🔥 EMBEDDING FUNCTION
 // =============================
-export const getEmbedding = async (text) => {
+// gemini.service.js
+
+// Add a taskType parameter with a default
+export const getEmbedding = async (text, taskType = TaskType.RETRIEVAL_DOCUMENT) => {
   try {
     const result = await embeddingModel.embedContent({
       content: { parts: [{ text }] },
-      taskType: TaskType.RETRIEVAL_DOCUMENT,
+      taskType,                        // ← now dynamic
       outputDimensionality: 768,
     });
-
     return result.embedding.values;
   } catch (err) {
     console.error("❌ Embedding Error:", err);
@@ -77,11 +79,8 @@ Instructions:
 - No markdown, no *, no bullets
 - Keep it concise and human
 - Use ONLY the context if available
-- If context is empty or irrelevant, say:
-"I'm sorry, I couldn't find that information in our system. Please contact support."
-
-Now answer:
-`;
+  Now answer:
+  `;
 
     const chat = model.startChat({ history });
 

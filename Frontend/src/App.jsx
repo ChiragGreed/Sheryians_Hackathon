@@ -1,11 +1,15 @@
 import React from 'react'
 import { createBrowserRouter, RouterProvider } from 'react-router'
 import AppLayout from './components/AppLayout'
-import Home from './pages/Home'
+import Home from './features/home/pages/Home'
 import Login from './features/auth/pages/Login'
 import Register from './features/auth/pages/Register'
 import AcceptAgentInvitation from './features/auth/pages/AcceptAgentInvitation'
 import ChatPage from './features/chat/pages/ChatPage'
+import AdminPage from './features/admin/pages/AdminPage'
+import SettingsPage from './features/admin/pages/SettingsPage'
+import ProtectedRoute from './components/ProtectedRoute'
+import PublicRoute from './components/PublicRoute'
 
 const App = () => {
 
@@ -19,23 +23,41 @@ const App = () => {
           element: <Home />
         },
         {
-          path: "/login",
-          element: <Login />
+          element: <PublicRoute />,
+          children: [
+            {
+              path: "login",
+              element: <Login />
+            },
+            {
+              path: "register",
+              element: <Register />
+            }
+          ]
         },
         {
-          path: "/register",
-          element: <Register />
-        },
-        {
-          path: "/accept-agent-invitation",
+          path: "accept-agent-invitation",
           element: <AcceptAgentInvitation />
         },
       ]
     },
-    // ChatPage has its own full-screen layout (no Navbar/Footer)
+    // Protected Routes (Chat, Admin, Settings)
     {
-      path: "/chat",
-      element: <ChatPage />
+      element: <ProtectedRoute />,
+      children: [
+        {
+          path: "/chat",
+          element: <ChatPage />
+        },
+        {
+          path: "/admin",
+          element: <AdminPage />
+        },
+        {
+          path: "/settings",
+          element: <SettingsPage />
+        }
+      ]
     }
   ])
 

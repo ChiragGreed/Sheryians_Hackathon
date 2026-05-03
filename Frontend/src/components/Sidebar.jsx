@@ -5,20 +5,18 @@ import { Link, useLocation } from 'react-router';
 // Props (to be wired later): user, onLogout
 
 const NAV_ITEMS = [
-  { icon: 'grid_view',      label: 'Dashboard',    path: '/'           },
-  { icon: 'chat',           label: 'Messages',     path: '/chat'       },
-  { icon: 'confirmation_number', label: 'Tickets', path: '/tickets'    },
-  { icon: 'smart_toy',      label: 'AI Assistant', path: '/assistant'  },
+  { icon: 'chat',           label: 'Chat',     path: '/chat'       },
+  { icon: 'person',      label: 'Admin', path: '/admin'  },
 ];
 
-const ChatSidebar = ({ onLogout = () => {} }) => {
+const Sidebar = ({ onLogout = () => {} }) => {
   const location = useLocation();
 
   return (
     <aside className="w-52 flex-shrink-0 flex flex-col bg-surface-container-lowest border-r border-outline/10 h-full">
 
       {/* ── Brand badge ─────────────────────────────────────────── */}
-      <div className="px-4 py-5 border-b border-outline/10">
+      <div className="px-4 py-5 bord  er-b border-outline/10">
         <div className="flex items-center gap-2 mb-0.5">
           <span className="w-2 h-2 rounded-full bg-primary-fixed animate-pulse flex-shrink-0" />
           <span className="font-headline-md text-sm text-on-surface">Core Terminal</span>
@@ -90,4 +88,4 @@ const ChatSidebar = ({ onLogout = () => {} }) => {
   );
 };
 
-export default ChatSidebar;
+export default Sidebar;
