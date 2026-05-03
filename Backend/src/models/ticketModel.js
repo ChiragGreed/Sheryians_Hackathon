@@ -23,13 +23,13 @@ const ticketSchema = new mongoose.Schema(
     organizationId: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "organizations",
-      required: false,
+      required: true,
     },
 
     // 🔹 Ticket status
     status: {
       type: String,
-      enum: ["open", "resolved", "escalated", "closed"],
+      enum: ["open", "assigned", "in_progress", "resolved", "escalated"],
       default: "open",
     },
 
@@ -38,6 +38,28 @@ const ticketSchema = new mongoose.Schema(
       type: Boolean,
       default: false,
     },
+
+    assignedAgent: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User",
+    },
+
+    resolvedBy: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User",
+    },
+
+    assignmentHistory:[
+    {
+      Agent: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "User",
+      },
+      assignedAt: {
+        type: Date,
+        default: Date.now,
+      },
+    }],
   },
   { timestamps: true }
 );
