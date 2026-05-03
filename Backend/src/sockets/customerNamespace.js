@@ -84,7 +84,7 @@ const setupCustomerNamespace = (io) => {
         socket.emit("ai:typing", { typing: true });
 
         // 4. Get AI response
-        const aiText = await generateAIResponse({ ticketId, query: content.trim()});
+        const aiText = await generateAIResponse(ticketId, content.trim());
 
         // 5. Save AI message to DB
         const aiMsg = await Message.create({
