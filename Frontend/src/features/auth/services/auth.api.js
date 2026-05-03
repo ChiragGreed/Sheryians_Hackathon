@@ -22,7 +22,6 @@ export function loginApi({ email, password }) {
         password
     })
 
-    console.log(res);
     return res
 }
 

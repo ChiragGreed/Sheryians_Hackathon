@@ -23,7 +23,7 @@ const RegisterForm = () => {
     try {
       const response = await register(username, email, password, organizationName);
       
-      dispatch(setCredentials({ user: response.data.user }));
+      dispatch(setCredentials({ user: response.data.user, token: response.data.token }));
       
       navigate('/');
     } catch (err) {
