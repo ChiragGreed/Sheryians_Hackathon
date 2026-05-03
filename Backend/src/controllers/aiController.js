@@ -10,28 +10,28 @@ export const handleAI = async (req, res) => {
         const { query, visitorId } = req.body;
         const organizationId = req.user?.organizationId;
 
-    if (!query || !organizationId) {
-        return res.status(400).json({
-            error: "Query and organization ID are required",
-        });
-    }
+        if (!query || !organizationId) {
+            return res.status(400).json({
+                error: "Query and organization ID are required",
+            });
+        }
 
-    const chunks = await searchChunks(query, organizationId);
+        const chunks = await searchChunks(query, organizationId);
 
 
         if (chunks.length === 0) {
-        const ticket = await ticketModel.create({
-            query,
-            visitorId: visitorId || "anonymous-user",
-            organizationId,
-            status: "open",
-        });
+            const ticket = await ticketModel.create({
+                query,
+                visitorId: visitorId || "anonymous-user",
+                organizationId,
+                status: "open",
+            });
 
-        return res.json({
-            answer:
-            "I couldn't find that information. A support ticket has been created. and an agent will get back to you soon. Thank you for your patience!",
-            ticketId: ticket._id,
-        });
+            return res.json({
+                answer:
+                    "I couldn't find that information. A support ticket has been created. and an agent will get back to you soon. Thank you for your patience!",
+                ticketId: ticket._id,
+            });
         }
 
         const answer = await generateAIResponse({ query, chunks });

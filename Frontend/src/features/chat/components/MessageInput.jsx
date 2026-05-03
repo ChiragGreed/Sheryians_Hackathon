@@ -8,6 +8,7 @@ import React, { useState, useRef } from 'react';
 const MessageInput = ({
   onSendMessage = (content) => console.log('Send:', content),
   onTyping = () => {},
+  onAskAI = () => {},
   disabled = false,
 }) => {
   const [inputValue, setInputValue] = useState('');
@@ -81,17 +82,22 @@ const MessageInput = ({
           </button>
         </div>
 
-        {/* Send button */}
+        {/* AI Assistant button */}
         <button
-          id="chat-send-btn"
-          onClick={handleSend}
+          onClick={() => {
+            const trimmed = inputValue.trim();
+            if (trimmed) {
+              onAskAI(trimmed);
+              setInputValue('');
+            }
+          }}
           disabled={!canSend}
           type="button"
-          aria-label="Send message"
+          aria-label="Ask AI Assistant"
           className={`
-            flex-shrink-0 w-10 h-10 rounded-xl flex items-center justify-center transition-all duration-200
+            flex-shrink-0 w-10 h-10 rounded-xl flex items-center justify-center transition-all duration-200 mr-1
             ${canSend
-              ? 'bg-primary-fixed text-on-primary hover:brightness-110 active:scale-95 shadow-lg shadow-primary-fixed/20'
+              ? 'bg-secondary-fixed text-on-secondary hover:brightness-110 active:scale-95 shadow-lg shadow-secondary-fixed/20'
               : 'bg-surface-container text-on-surface-variant cursor-not-allowed opacity-40'}
           `}
         >
