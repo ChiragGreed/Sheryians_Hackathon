@@ -13,7 +13,7 @@ let socket = null;
 export function createSocket(token = null) {
   if (socket) return socket; // already created — return same instance
 
-  socket = io('http://localhost:9010/customer', {
+  socket = io('https://sheryians-hackathon.onrender.com/customer', {
     autoConnect: false,        // we control when to connect
     withCredentials: true,
     auth: token ? { token } : {},

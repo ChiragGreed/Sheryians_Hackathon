@@ -55,7 +55,7 @@ export const register = async (req, res) => {
     try {
         await session.withTransaction(async () => {
             [organization] = await organizationModel.create([{ name: organizationName, slug }], { session });
-            [user] = await userModel.create([{ username, email, password, role: "Owner", organizationId: organization._id }], { session });
+            [user] = await userModel.create([{ username, email, password, role: "Admin", organizationId: organization._id }], { session });
         });
     } catch (err) {
         if (err.code === 11000) {

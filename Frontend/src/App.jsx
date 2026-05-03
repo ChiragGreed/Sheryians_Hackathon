@@ -4,6 +4,7 @@ import AppLayout from './components/AppLayout'
 import Home from './pages/Home'
 import Login from './features/auth/pages/Login'
 import Register from './features/auth/pages/Register'
+import AcceptAgentInvitation from './features/auth/pages/AcceptAgentInvitation'
 import ChatPage from './features/chat/pages/ChatPage'
 import AdminPage from './features/admin/pages/AdminPage'
 import SettingsPage from './features/admin/pages/SettingsPage'
@@ -22,6 +23,7 @@ const App = () => {
           element: <Home />
         },
         {
+        {
           element: <PublicRoute />,
           children: [
             {
@@ -33,7 +35,11 @@ const App = () => {
               element: <Register />
             }
           ]
-        }
+        },
+        {
+          path: "accept-agent-invitation",
+          element: <AcceptAgentInvitation />
+        },
       ]
     },
     // Protected Routes (Chat, Admin, Settings)

@@ -1,13 +1,9 @@
 import express from "express";
-import { handleAI,getTickets,respondTicket } from "../controllers/aiController.js";
+import { handleAI } from "../controllers/aiController.js";
 import { verifyToken } from "../middleware/authMiddleware.js";
 
 const router = express.Router();
 
-router.post("/ai/respond",verifyToken , handleAI);
-
-router.get("/tickets", getTickets);
-
-router.post("/tickets/:id/respond", respondTicket);
+router.post("/respond", verifyToken, handleAI);
 
 export default router;

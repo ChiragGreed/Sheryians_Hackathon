@@ -19,6 +19,7 @@ const ChatPage = () => {
     sendTyping,
   } = useChat(token);
 
+ 
   return (
     <div className="w-full h-screen flex bg-background overflow-hidden">
       {/* Panel 1 — Left navigation sidebar */}
