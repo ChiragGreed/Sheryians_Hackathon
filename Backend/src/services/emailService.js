@@ -49,7 +49,7 @@ const sendEmail = async (to, subject, htmlBody) => {
  */
 export const sendAgentInvitationEmail = async (recipientEmail, organizationName, invitationToken, frontendUrl = "https://sheryians-hackathon.onrender.com") => {
     try {
-        const acceptanceLink = `${frontendUrl}/api/agent/accept-invitation?token=${invitationToken}`;
+        const acceptanceLink = `${frontendUrl}/agent/accept-invitation?token=${invitationToken}`;
 
         const html = `
             < div style = "background:#0a0a0a; padding: 40px 20px; font-family: 'Helvetica Neue', Helvetica, sans-serif;" >
