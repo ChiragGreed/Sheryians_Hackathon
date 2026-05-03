@@ -4,21 +4,36 @@ import authRouter from './routes/authRouter.js';
 import chatRouter from "./routes/chatRouter.js";
 import uploadRoutes from "./routes/uploadRouter.js";
 import aiRoutes from "./routes/aiRoutes.js";
+import agentRouter from "./routes/adminRouter.js";
 import passport from 'passport';
 import GoogleStrategy from 'passport-google-oauth20';
 import { Config } from './config/config.js';
 import cors from 'cors';
+import adminRouter from './routes/adminRouter.js';
+import ticketRouter from './routes/ticketRouter.js';
+import integrationRouter from './routes/integrationRouter.js';
+import path from 'path'
+import { fileURLToPath } from "url";
+
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 const app = express();
+
+const publicFile = path.join(__dirname, "../", "public/dist")
+
 
 app.use(express.json());
 
 app.use(cors({
-    origin: 'http://localhost:5173',
+    origin: 'http://localhost:5173' || 'https://sheryians-hackathon.onrender.com/',
     credentials: true
 }));
 
 app.use(cookieParser());
+
+app.use(express.static(publicFile))
 
 app.use(passport.initialize());
 
@@ -34,6 +49,12 @@ passport.use(new GoogleStrategy({
 app.use('/api/auth', authRouter);
 app.use("/api/chat", chatRouter);
 app.use("/api", uploadRoutes);
-app.use("/api", aiRoutes);
+app.use("/api/ai", aiRoutes);
+app.use("/api/agent", adminRouter);
+app.use("/api/tickets", ticketRouter)
+
+
+app.use('/', integrationRouter);
+
 
 export default app;

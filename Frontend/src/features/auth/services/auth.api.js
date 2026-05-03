@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const api = axios.create({
-    baseURL: "http://localhost:9010/api/auth",
+    baseURL: "https://sheryians-hackathon.onrender.com/api/auth",
     withCredentials: true
 })
 
@@ -27,5 +27,30 @@ export async function loginApi({ email, password }) {
 
 export async function getMeApi({ email, password }) {
     const res = await api.get("/getMe")
+    return res
+}
+
+export async function verifyAgentInvitationToken(token) {
+    const agentApi = axios.create({
+        baseURL: "https://sheryians-hackathon.onrender.com/api/agent",
+        withCredentials: true
+    })
+    const res = await agentApi.get("/verify-invitation", {
+        params: { token }
+    })
+    return res
+}
+
+export async function acceptAgentInvitation(token, username, password) {
+    const agentApi = axios.create({
+        baseURL: "https://sheryians-hackathon.onrender.com/api/agent",
+        withCredentials: true
+    })
+    const res = await agentApi.post("/accept-invitation", {
+        username,
+        password
+    }, {
+        params: { token }
+    })
     return res
 }
