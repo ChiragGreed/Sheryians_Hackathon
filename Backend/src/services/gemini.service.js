@@ -79,11 +79,8 @@ Instructions:
 - No markdown, no *, no bullets
 - Keep it concise and human
 - Use ONLY the context if available
-- If context is empty or irrelevant, say:
-"I'm sorry, I couldn't find that information in our system. Please contact support."
-
-Now answer:
-`;
+  Now answer:
+  `;
 
     const chat = model.startChat({ history });
 

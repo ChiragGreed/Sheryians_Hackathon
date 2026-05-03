@@ -13,7 +13,7 @@ import mongoose from "mongoose";
 export const sendAgentInvitation = async (req, res) => {
     try {
         const { agentEmail } = req.body;
-        const adminId = req.user; // From auth middleware
+        const adminId = req.user.userId; // From auth middleware
 
         if (!agentEmail) {
             return res.status(400).json({
