@@ -118,7 +118,8 @@ export const sendAgentInvitation = async (req, res) => {
  */
 export const acceptAgentInvitation = async (req, res) => {
     try {
-        const { token, username, password } = req.body;
+        const token = req.query.token;
+        const { username, password } = req.body;
 
         if (!token || !username || !password) {
             return res.status(400).json({
