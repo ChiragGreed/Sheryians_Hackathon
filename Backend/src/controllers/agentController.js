@@ -5,6 +5,7 @@ import { sendAgentInvitationEmail, sendAgentAcceptanceConfirmation } from "../se
 import JWT from "jsonwebtoken";
 import { Config } from "../config/config.js";
 import mongoose from "mongoose";
+import agentInvitationModel from "../models/InvitationModel.js";
 
 /**
  * Send agent invitation email
@@ -60,7 +61,7 @@ export const sendAgentInvitation = async (req, res) => {
         }
 
         // Check if invitation already pending
-        const existingInvitation = await agentInvitationModel.findOne({
+        const existingInvitation = await InvitationModel.findOne({
             email: agentEmail,
             organizationId: admin.organizationId,
             status: "pending"
