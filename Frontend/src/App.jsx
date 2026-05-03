@@ -1,7 +1,7 @@
 import React from 'react'
 import { createBrowserRouter, RouterProvider } from 'react-router'
 import AppLayout from './components/AppLayout'
-import Home from './pages/Home'
+import Home from './features/home/pages/Home'
 import Login from './features/auth/pages/Login'
 import Register from './features/auth/pages/Register'
 import AcceptAgentInvitation from './features/auth/pages/AcceptAgentInvitation'
