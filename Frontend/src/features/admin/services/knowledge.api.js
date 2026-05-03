@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const api = axios.create({
-    baseURL: "https://sheryians-hackathon.onrender.com//api",
+    baseURL: "https://sheryians-hackathon.onrender.com/api",
     withCredentials: true
 });
 
