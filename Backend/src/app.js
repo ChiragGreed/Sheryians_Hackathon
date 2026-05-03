@@ -4,6 +4,7 @@ import authRouter from './routes/authRouter.js';
 import chatRouter from "./routes/chatRouter.js";
 import uploadRoutes from "./routes/uploadRouter.js";
 import aiRoutes from "./routes/aiRoutes.js";
+import adminRouter from "./routes/adminRouter.js";
 import passport from 'passport';
 import GoogleStrategy from 'passport-google-oauth20';
 import { Config } from './config/config.js';
