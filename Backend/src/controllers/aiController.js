@@ -45,58 +45,5 @@ export const handleAI = async (req, res) => {
 
 
 
-export const getTickets = async (req, res) => {
-    try {
-        const organizationId = req.user.organizationId;
-
-        const tickets = await ticketModel
-        .find({ organizationId })
-        .sort({ createdAt: -1 });
-
-        res.json(tickets);
-    } catch (err) {
-        console.error("❌ Get Tickets Error:", err);
-        res.status(500).json({ error: "Failed to fetch tickets" });
-    }
-};
 
 
-export const respondTicket = async (req, res) => {
-    try {
-        const { response } = req.body;
-        const { id } = req.params;
-
-        if (!mongoose.Types.ObjectId.isValid(id)) {
-        return res.status(400).json({ error: "Invalid ticket ID" });
-        }
-
-        const ticket = await ticketModel.findById(id);
-
-        if (!ticket) {
-        return res.status(404).json({ error: "Ticket not found" });
-        }
-
-        ticket.response = response;
-        ticket.status = "resolved";
-        ticket.resolvedBy = req.user._id;
-
-        await ticket.save();
-
-        const learnText = `
-            Support answer:
-            ${response}
-            Related question:
-            ${ticket.query}`;
-
-        await processText(learnText, ticket.organizationId);
-
-        res.json({
-        message: "Ticket resolved and learned successfully",
-        ticket,
-        });
-
-    } catch (err) {
-        console.error("❌ Respond Ticket Error:", err);
-        res.status(500).json({ error: "Failed to respond to ticket" });
-    }
-};

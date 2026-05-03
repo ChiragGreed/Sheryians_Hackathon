@@ -10,6 +10,7 @@ import GoogleStrategy from 'passport-google-oauth20';
 import { Config } from './config/config.js';
 import cors from 'cors';
 import adminRouter from './routes/adminRouter.js';
+import ticketRouter from './routes/ticketRouter.js';
 
 const app = express();
 
@@ -36,7 +37,8 @@ passport.use(new GoogleStrategy({
 app.use('/api/auth', authRouter);
 app.use("/api/chat", chatRouter);
 app.use("/api", uploadRoutes);
-app.use("/api", aiRoutes);
+app.use("/api/ai", aiRoutes);
 app.use("/api/agent", adminRouter);
+app.use("/api/tickets",ticketRouter)
 
 export default app;

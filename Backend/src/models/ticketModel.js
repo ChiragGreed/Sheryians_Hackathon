@@ -51,7 +51,7 @@ const ticketSchema = new mongoose.Schema(
 
     assignmentHistory:[
     {
-      agent: {
+      Agent: {
         type: mongoose.Schema.Types.ObjectId,
         ref: "User",
       },
