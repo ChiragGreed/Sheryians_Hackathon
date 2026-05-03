@@ -18,6 +18,15 @@ function generateToken(user) {
     );
 };
 
+// FIX: centralized cookie options — was missing httpOnly, sameSite, secure
+// Without these, browsers block the cookie on HTTPS deployed sites
+const cookieOptions = {
+    httpOnly: true,
+    sameSite: "none",   // required for cross-origin requests (frontend/backend on different domains)
+    secure: true,       // required when sameSite is "none"
+    maxAge: 7 * 24 * 60 * 60 * 1000 // 7 days in ms
+};
+
 async function generateUniqueSlug(baseName, maxAttempts = 10) {
     const baseSlug = slugify(baseName, { lower: true, strict: true });
     let slug = baseSlug;
@@ -38,12 +47,14 @@ export const register = async (req, res) => {
             success: false
         });
     }
-    const userExist = await userModel.findOne({ $or: [{ username }, { email }] });
+    const userExist = await userModel.findOne({ email });
 
-    if (userExist) return res.status(400).json({
-        message: "User already exists with this " + (userExist.email === email ? "email" : "username"),
-        success: false,
-    })
+    if(userExist) {
+        return res.status(400).json({
+            message: "User already exists with this email",
+            success: false
+        })
+    }
 
     const slug = await generateUniqueSlug(organizationName);
     if (!slug) {
@@ -68,7 +79,7 @@ export const register = async (req, res) => {
     }
 
     const token = generateToken(user);
-    res.cookie("token", token);
+    res.cookie("token", token, cookieOptions); // FIX: added cookieOptions
 
     res.status(201).json({
         message: "Organization and owner created",
@@ -76,6 +87,7 @@ export const register = async (req, res) => {
         token,
         user: {
             id: user._id,
+            username: user.username,
             email: user.email,
             role: user.role,
             organizationId: user.organizationId
@@ -85,44 +97,46 @@ export const register = async (req, res) => {
             name: organization.name,
             slug: organization.slug
         }
-    })
-
-}
+    });
+};
 
 export const login = async (req, res) => {
-    const { email, password } = req.body;
+    try {
+        const { email, password } = req.body;
 
-    const user = await userModel.findOne({ email }).select('+password');
+        const user = await userModel.findOne({ email }).select('+password');
 
-    if (!user) return res.status(400).json({
-        message: "Invalid credentials",
-        success: false,
-    })
+        if (!user) return res.status(400).json({
+            message: "Invalid credentials",
+            success: false,
+        });
 
-    const VerifyPassword = await bcrypt.compare(password, user.password);
+        const VerifyPassword = await bcrypt.compare(password, user.password);
 
-    if (!VerifyPassword) return res.status(400).json({
-        message: "Invalid credentials",
-        success: false,
-    })
+        if (!VerifyPassword) return res.status(400).json({
+            message: "Invalid credentials",
+            success: false,
+        });
 
+        const token = generateToken(user);
+        res.cookie("token", token, cookieOptions); // FIX: added cookieOptions
 
-    const token = generateToken(user);
-    res.cookie("token", token);
-
-    res.status(200).json({
-        message: "User Logged in",
-        success: true,
-        token,
-        user: {
-            id: user._id,
-            email: user.email,
-            role: user.role,
-            organizationId: user.organizationId
-        }
-    })
-
-}
+        res.status(200).json({
+            message: "User Logged in",
+            success: true,
+            token,
+            user: {
+                id: user._id,
+                username: user.username,
+                email: user.email,
+                role: user.role,
+                organizationId: user.organizationId
+            }
+        });
+    } catch (err) {
+        res.status(500).json({ message: err.message, success: false });
+    }
+};
 
 export const googleAuth = async (req, res) => {
     const { id, displayName, emails } = req.user;
@@ -154,7 +168,7 @@ export const googleAuth = async (req, res) => {
     }
 
     const token = generateToken(user);
-    res.cookie("token", token);
+    res.cookie("token", token, cookieOptions); // FIX: added cookieOptions
 
     res.status(201).json({
         message: "User Authenticated successfully",
@@ -162,27 +176,31 @@ export const googleAuth = async (req, res) => {
         token,
         user: {
             id: user._id,
+            username: user.username,
             email: user.email,
             role: user.role,
             organizationId: user.organizationId
         },
     });
-}
+};
 
 export const getMe = async (req, res) => {
+    try {
+        // FIX: was findById(req.user) — req.user is the decoded token object, need req.user.userId
+        const user = await userModel.findById(req.user.userId);
 
-    const user = await userModel.findById(req.user);
+        if (!user) return res.status(404).json({
+            message: "User not found",
+            success: false,
+            error: "No user found with this token"
+        });
 
-    if (!user) return res.status(404).json({
-        message: "User not found",
-        success: false,
-        error: "No user forund with this token"
-    });
-
-    res.status(200).json({
-        message: "Fetched user details",
-        success: true,
-        user
-    })
-
-}
+        res.status(200).json({
+            message: "Fetched user details",
+            success: true,
+            user
+        });
+    } catch (err) {
+        res.status(500).json({ message: err.message, success: false });
+    }
+};

@@ -14,3 +14,8 @@ export async function getRecentConversations() {
     const res = await api.get("/dashboard/conversations");
     return res.data;
 }
+
+export async function getTickets() {
+    const res = await api.get("/tickets/admin");
+    return res.data;
+}

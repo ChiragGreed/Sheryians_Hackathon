@@ -79,6 +79,7 @@ Instructions:
 - No markdown, no *, no bullets
 - Keep it concise and human
 - Use ONLY the context if available
+- If the context doesn't contain the answer or you are unsure, reply EXACTLY with "HANDOVER_TO_AGENT"
   Now answer:
   `;
 

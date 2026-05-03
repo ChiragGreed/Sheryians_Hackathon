@@ -5,11 +5,12 @@ import { Link, useLocation, useNavigate } from 'react-router';
 // Props (to be wired later): user, onLogout
 
 const NAV_ITEMS = [
-  { icon: 'chat',           label: 'Chat',     path: '/chat'       },
-  { icon: 'person',      label: 'Admin', path: '/admin'  },
+  { icon: 'chat', label: 'Chat', path: '/chat' },
+  { icon: 'person', label: 'Admin', path: '/admin' },
+  { icon: 'confirmation_number', label: 'Ticket', path: '/ticket' }
 ];
 
-const Sidebar = ({ onLogout = () => {} }) => {
+const Sidebar = ({ onLogout = () => { } }) => {
   const location = useLocation();
 
   const navigate = useNavigate()
@@ -18,7 +19,7 @@ const Sidebar = ({ onLogout = () => {} }) => {
     <aside className="w-52 flex-shrink-0 flex flex-col bg-surface-container-lowest border-r border-outline/10 h-full">
 
       {/* ── Brand badge ─────────────────────────────────────────── */}
-      <div className="px-4 py-5 bord  er-b border-outline/10">
+      <div className="px-4 py-5 border-b border-outline/10">
         <div
           onClick={() => navigate("/")}
           className="flex items-center gap-2 mb-0.5 cursor-pointer"

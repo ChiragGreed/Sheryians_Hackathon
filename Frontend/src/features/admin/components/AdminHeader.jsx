@@ -13,6 +13,8 @@ const AdminHeader = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   
+  console.log(user);
+
   const initials = user?.username ? user.username.substring(0, 2).toUpperCase() : 'AD';
 
   // Close dropdown when clicking outside

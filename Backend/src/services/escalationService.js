@@ -6,10 +6,11 @@ export const checkEscalation = (message) => {
   return ESCALATION_KEYWORDS.some((kw) => lower.includes(kw));
 };
 
-export const escalateTicket = async (ticketId) => {
+export const escalateTicket = async (ticketId, query) => {
   await Ticket.findByIdAndUpdate(ticketId, {
     status: "escalated",
     isEscalated: true,
+    query: query,
   });
   console.log(`🚨 Ticket ${ticketId} escalated to human`);
 };

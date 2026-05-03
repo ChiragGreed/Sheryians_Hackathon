@@ -10,29 +10,25 @@ export const assignTicket = async (req, res) => {
         const { agentId } = req.body;
         const { organizationId, role } = req.user;
 
-        
-        
         if (role !== "Admin") {
             return res.status(403).json({ error: "Only Admin can assign" });
         }
-        
+
         const ticket = await ticketModel.findById(id);
-        
         if (!ticket) return res.status(404).json({ error: "Not found" });
-        
+
         if (ticket.organizationId.toString() !== organizationId.toString()) {
             return res.status(403).json({ error: "Unauthorized" });
         }
 
         const agent = await userModel.findById(agentId);
         if (!agent || agent.role !== "Agent") {
-        return res.status(400).json({ error: "Invalid agent" });
+            return res.status(400).json({ error: "Invalid agent" });
         }
 
         ticket.assignedAgent = agentId;
         ticket.status = "assigned";
-
-        ticket.assignmentHistory.push({ agent: agentId });
+        ticket.assignmentHistory.push({ Agent: agentId }); // FIX: consistent casing with schema (Agent not agent)
 
         await ticket.save();
 
@@ -53,19 +49,15 @@ export const reassignTicket = async (req, res) => {
         if (!ticket) return res.status(404).json({ error: "Not found" });
 
         if (ticket.organizationId.toString() !== organizationId.toString()) {
-        return res.status(403).json({ error: "Unauthorized" });
+            return res.status(403).json({ error: "Unauthorized" });
         }
 
-        if (
-        ticket.assignedAgent?.toString() !== userId &&
-        role !== "Admin"
-        ) {
-        return res.status(403).json({ error: "Not allowed" });
+        if (ticket.assignedAgent?.toString() !== userId && role !== "Admin") {
+            return res.status(403).json({ error: "Not allowed" });
         }
 
         ticket.assignedAgent = newAgentId;
         ticket.status = "assigned";
-
         ticket.assignmentHistory.push({ Agent: newAgentId });
 
         await ticket.save();
@@ -86,12 +78,11 @@ export const takeTicket = async (req, res) => {
         if (!ticket) return res.status(404).json({ error: "Not found" });
 
         if (ticket.organizationId.toString() !== organizationId.toString()) {
-        return res.status(403).json({ error: "Unauthorized" });
+            return res.status(403).json({ error: "Unauthorized" });
         }
 
         ticket.assignedAgent = userId;
         ticket.status = "in_progress";
-
         ticket.assignmentHistory.push({ Agent: userId });
 
         await ticket.save();
@@ -110,7 +101,7 @@ export const resolveTicket = async (req, res) => {
         const { userId, organizationId } = req.user;
 
         if (!mongoose.Types.ObjectId.isValid(id)) {
-        return res.status(400).json({ error: "Invalid ID" });
+            return res.status(400).json({ error: "Invalid ID" });
         }
 
         const ticket = await ticketModel.findById(id);
@@ -136,26 +127,43 @@ export const resolveTicket = async (req, res) => {
     }
 };
 
-// 🔥 Admin VIEW
+// 🔥 ADMIN VIEW — FIX: wrap in try/catch and return { success, tickets } so frontend can read res.data.tickets
 export const getAdminTickets = async (req, res) => {
-    const { organizationId } = req.user;
-    const tickets = await ticketModel.find({ organizationId });
-    res.json(tickets);
+    try {
+        const { organizationId } = req.user;
+        const tickets = await ticketModel
+            .find({ organizationId })
+            .sort({ createdAt: -1 }); // newest first
+        res.json({ success: true, tickets });
+    } catch (err) {
+        res.status(500).json({ success: false, error: err.message });
+    }
 };
 
-// 🔥 AGENT VIEW
+// 🔥 AGENT VIEW — FIX: same wrap
 export const getMyTickets = async (req, res) => {
-    const { userId } = req.user;
-    const tickets = await ticketModel.find({
-        assignedAgent: userId,
-        status: { $ne: "resolved" },
-    });
-    res.json(tickets);
+    try {
+        const { userId } = req.user;
+        const tickets = await ticketModel
+            .find({
+                assignedAgent: userId,
+                status: { $ne: "resolved" },
+            })
+            .sort({ createdAt: -1 });
+        res.json({ success: true, tickets });
+    } catch (err) {
+        res.status(500).json({ success: false, error: err.message });
+    }
 };
-
 
 export const getTickets = async (req, res) => {
-    const { organizationId } = req.user;
-    const tickets = await ticketModel.find({ organizationId });
-    res.json(tickets);
+    try {
+        const { organizationId } = req.user;
+        const tickets = await ticketModel
+            .find({ organizationId })
+            .sort({ createdAt: -1 });
+        res.json({ success: true, tickets });
+    } catch (err) {
+        res.status(500).json({ success: false, error: err.message });
+    }
 };

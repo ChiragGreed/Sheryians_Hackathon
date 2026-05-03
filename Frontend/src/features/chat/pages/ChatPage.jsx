@@ -29,7 +29,7 @@ const ChatPage = () => {
 
   const handleAskAI = async (query) => {
     if (!query) return;
-    
+
     // 1. Manually add user message to the UI
     const userMsg = {
       _id: `user_${Date.now()}`,
@@ -41,8 +41,8 @@ const ChatPage = () => {
 
     try {
       // 2. Call the AI RAG pipeline
-      const response = await getAiResponse({ 
-        query, 
+      const response = await getAiResponse({
+        query,
         visitorId: localStorage.getItem('solvex_visitor_id'),
       });
 
@@ -60,7 +60,7 @@ const ChatPage = () => {
     }
   };
 
- 
+
   return (
     <div className="w-full h-screen flex bg-background overflow-hidden">
       {/* Panel 1 — Left navigation sidebar */}

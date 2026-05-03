@@ -64,7 +64,7 @@ const setupCustomerNamespace = (io) => {
 
         // 2. Check escalation — "human" keyword detect karo
         if (checkEscalation(content)) {
-          await escalateTicket(ticketId);
+          await escalateTicket(ticketId, content.trim());
 
           await Message.findByIdAndUpdate(userMsg._id, {
             "metadata.isEscalationTrigger": true,
@@ -83,17 +83,41 @@ const setupCustomerNamespace = (io) => {
         // 3. Show typing indicator
         socket.emit("ai:typing", { typing: true });
 
-        // 4. Get AI response
-        const aiText = await generateAIResponse(ticketId, content.trim());
+        // 4. Search Knowledge Base (RAG)
+        const { searchChunks } = await import("../services/search.service.js");
+        const ticket = await Ticket.findById(ticketId);
+        const chunks = await searchChunks(content.trim(), ticket.organizationId);
 
-        // 5. Save AI message to DB
+        let aiText;
+        if (chunks.length === 0) {
+          // No info found -> Auto Escalate
+          aiText = "I'm sorry, I couldn't find specific information about that in our knowledge base. I'm handing you over to a human agent who will be with you shortly.";
+          await escalateTicket(ticketId, content.trim());
+          socket.emit("ticket:escalated", { role: "system", content: "AI could not resolve the query. Handing over to agent..." });
+        } else {
+          // 5. Get AI response with context
+          aiText = await generateAIResponse({
+            ticketId,
+            query: content.trim(),
+            chunks
+          });
+
+          // Check if AI itself requested handover (fallback)
+          if (aiText.includes("HANDOVER_TO_AGENT") || aiText.toLowerCase().includes("i don't know")) {
+            aiText = "I'm not quite sure about that. Let me connect you with a human agent for better assistance.";
+            await escalateTicket(ticketId, content.trim());
+            socket.emit("ticket:escalated", { role: "system", content: "Connecting to agent..." });
+          }
+        }
+
+        // 6. Save AI message to DB
         const aiMsg = await Message.create({
           ticketId,
           role: "assistant",
           content: aiText,
         });
 
-        // 6. Send reply back
+        // 7. Send reply back
         socket.emit("ai:typing", { typing: false });
         socket.emit("message:new", aiMsg);
       } catch (err) {

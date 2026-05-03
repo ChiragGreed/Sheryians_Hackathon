@@ -7,6 +7,7 @@ import Register from './features/auth/pages/Register'
 import AcceptAgentInvitation from './features/auth/pages/AcceptAgentInvitation'
 import ChatPage from './features/chat/pages/ChatPage'
 import AdminPage from './features/admin/pages/AdminPage'
+import TicketsPage from './features/admin/pages/TicketsPage'
 import SettingsPage from './features/admin/pages/SettingsPage'
 import ProtectedRoute from './components/ProtectedRoute'
 import PublicRoute from './components/PublicRoute'
@@ -41,7 +42,7 @@ const App = () => {
         },
       ]
     },
-    // Protected Routes (Chat, Admin, Settings)
+    // Protected Routes (Chat, Admin, Settings, Ticket)
     {
       element: <ProtectedRoute />,
       children: [
@@ -52,6 +53,10 @@ const App = () => {
         {
           path: "/admin",
           element: <AdminPage />
+        },
+        {
+          path: "/ticket",
+          element: <TicketsPage />
         },
         {
           path: "/settings",
