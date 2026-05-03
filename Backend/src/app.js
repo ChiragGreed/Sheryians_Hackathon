@@ -27,7 +27,7 @@ const publicFile = path.join(__dirname, "../", "public/dist")
 app.use(express.json());
 
 app.use(cors({
-    origin: 'http://localhost:5173',
+    origin: 'http://localhost:5173' || 'https://sheryians-hackathon.onrender.com/',
     credentials: true
 }));
 
