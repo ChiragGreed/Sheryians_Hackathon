@@ -1,4 +1,3 @@
-import { getSessionId } from '../utils/session';
 import React from 'react';
 import { useSelector } from 'react-redux';
 import ChatSidebar from '../components/ChatSidebar';

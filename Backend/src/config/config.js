@@ -21,6 +21,14 @@ if (!process.env.GOOGLE_CLIENT_SECRET) {
     throw new Error("Google client secret not found in environmental variables")
 }
 
+if (!process.env.GOOGLE_USER) {
+    throw new Error("Google User not found in environmental variables")
+}
+
+if (!process.env.GOOGLE_REFRESH_TOKEN) {
+    throw new Error("Google Refresh token not found in environmental variables")
+}
+
 if (!process.env.PINECONE_API_KEY) {
     throw new Error("Pinecone API key not found in environmental variables")
 }
@@ -40,12 +48,17 @@ if (!process.env.HUGGINGFACE_API_KEY) {
 export const Config = {
     MONGO_URI: process.env.MONGO_URI,
     JWT_SECRET: process.env.JWT_SECRET,
-    GOOGLE_CLIENT_ID: process.env.GOOGLE_CLIENT_ID,
-    GOOGLE_CLIENT_SECRET: process.env.GOOGLE_CLIENT_SECRET,
+
     PORT: process.env.PORT,
+
     PINECONE_API_KEY: process.env.PINECONE_API_KEY,
     PINECONE_INDEX: process.env.PINECONE_INDEX,
+
     GEMINI_API_KEY: process.env.GEMINI_API_KEY,
     huggingFaceApiKey: process.env.HUGGINGFACE_API_KEY,
-    
+
+    GOOGLE_CLIENT_ID: process.env.GOOGLE_CLIENT_ID,
+    GOOGLE_CLIENT_SECRET: process.env.GOOGLE_CLIENT_SECRET,
+    GOOGLE_USER: process.env.GOOGLE_USER,
+    GOOGLE_REFRESH_TOKEN: process.env.GOOGLE_REFRESH_TOKEN
 }
