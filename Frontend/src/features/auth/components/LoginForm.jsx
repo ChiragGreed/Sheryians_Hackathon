@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router';
 import { useDispatch } from 'react-redux';
 import { setCredentials } from '../store/authSlice';
-import { login } from '../services/auth.api';
+import { loginApi } from '../services/auth.api';
 
 const LoginForm = () => {
   const [email, setEmail] = useState('');
@@ -19,7 +19,7 @@ const LoginForm = () => {
     setLoading(true);
 
     try {
-      const response = await login(email, password);
+      const response = await loginApi({email, password});
       
       dispatch(setCredentials({ user: response.data.user, token: response.data.token }));
       
