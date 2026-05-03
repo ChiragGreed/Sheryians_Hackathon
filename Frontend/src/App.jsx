@@ -4,6 +4,7 @@ import AppLayout from './components/AppLayout'
 import Home from './pages/Home'
 import Login from './features/auth/pages/Login'
 import Register from './features/auth/pages/Register'
+import ChatPage from './features/chat/pages/ChatPage'
 
 const App = () => {
 
@@ -23,8 +24,13 @@ const App = () => {
         {
           path: "/register",
           element: <Register />
-        }
+        },
       ]
+    },
+    // ChatPage has its own full-screen layout (no Navbar/Footer)
+    {
+      path: "/chat",
+      element: <ChatPage />
     }
   ])
 

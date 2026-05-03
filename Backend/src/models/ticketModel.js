@@ -6,7 +6,6 @@ const ticketSchema = new mongoose.Schema(
     // 🔹 User question (AI fallback input)
     query: {
       type: String,
-      required: true,
     },
 
     // 🔹 Admin response

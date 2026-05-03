@@ -2,7 +2,6 @@ import { createSlice } from '@reduxjs/toolkit';
 
 const initialState = {
     user: null,
-    Loading: true,
     isAuthenticated: false,
 };
 
@@ -12,6 +11,7 @@ const authSlice = createSlice({
     reducers: {
         setCredentials: (state, action) => {
             state.user = action.payload.user;
+            state.token = action.payload.token ?? null;
             state.isAuthenticated = true;
         },
         setLoading: (state, action) => {
@@ -20,6 +20,7 @@ const authSlice = createSlice({
         },
         logout: (state) => {
             state.user = null;
+            state.token = null;
             state.isAuthenticated = false;
         }
     }
