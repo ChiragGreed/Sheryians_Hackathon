@@ -21,9 +21,9 @@ const ticketSchema = new mongoose.Schema(
 
     // 🔹 Organization (multi-tenant support)
     organizationId: {
-      type: mongoose.Schema.Types.ObjectId, // ✅ upgraded
-      default: DUMMY_ORG_ID,
-      required: true,
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "organizations",
+      required: false,
     },
 
     // 🔹 Ticket status

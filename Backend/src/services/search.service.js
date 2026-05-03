@@ -9,7 +9,7 @@ export const searchChunks = async (query, organizationId) => {
         topK: 3,
         includeMetadata: true,
         filter: {
-            organizationId: { $eq: organizationId },
+            organizationId: { $eq: organizationId.toString() },
         },
     });
 

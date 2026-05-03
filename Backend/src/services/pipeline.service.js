@@ -34,7 +34,7 @@ export const processText = async (text, organizationId) => {
             values: embedding,
             metadata: {
                 text: chunk,
-                organizationId,
+                organizationId: organizationId.toString(),
             },
             });
         }

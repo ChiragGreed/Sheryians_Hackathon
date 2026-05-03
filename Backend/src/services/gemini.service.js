@@ -6,7 +6,7 @@ const genAI = new GoogleGenerativeAI(Config.GEMINI_API_KEY);
 
 // 🔹 MAIN MODEL
 export const model = genAI.getGenerativeModel({
-  model: "gemini-2.0-flash", // stable
+  model: "gemini-1.5-flash", // stable
 });
 
 // 🔹 EMBEDDING MODEL

@@ -1,8 +1,9 @@
 import express from 'express';
-import { googleAuth, login, register } from '../controllers/authController.js';
+import { getMe, googleAuth, login, register } from '../controllers/authController.js';
 import { loginValidator, registerValidator } from '../validation/authValidation.js';
 import passport from 'passport';
 import rateLimit from 'express-rate-limit';
+import { verifyToken } from '../middleware/authMiddleware.js';
 
 const authRouter = express.Router();
 
@@ -24,6 +25,8 @@ authRouter.get('/google/callback',
     passport.authenticate('google', { session: false, failureRedirect: '/login' }),
     googleAuth
 )
+
+authRouter.get('/getMe', verifyToken, getMe);
 
 
 export default authRouter
