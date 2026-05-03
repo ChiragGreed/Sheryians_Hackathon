@@ -4,10 +4,12 @@ import authRouter from './routes/authRouter.js';
 import chatRouter from "./routes/chatRouter.js";
 import uploadRoutes from "./routes/uploadRouter.js";
 import aiRoutes from "./routes/aiRoutes.js";
+import agentRouter from "./routes/adminRouter.js";
 import passport from 'passport';
 import GoogleStrategy from 'passport-google-oauth20';
 import { Config } from './config/config.js';
 import cors from 'cors';
+import adminRouter from './routes/adminRouter.js';
 
 const app = express();
 
@@ -35,5 +37,6 @@ app.use('/api/auth', authRouter);
 app.use("/api/chat", chatRouter);
 app.use("/api", uploadRoutes);
 app.use("/api", aiRoutes);
+app.use("/api/agent", adminRouter);
 
 export default app;
