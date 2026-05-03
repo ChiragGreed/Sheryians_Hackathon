@@ -8,37 +8,34 @@ import userModel from "../models/userModel.js";
 export const handleAI = async (req, res) => {
     try {
         const { query, visitorId } = req.body;
-        const organizationId = req.user.organizationId;
+        const organizationId = req.user?.organizationId;
 
-        
-        if (!query || !userId) {
-            return res.status(400).json({ 
-                error: "Query and user ID are required"
-            });
+        if (!query || !organizationId) {
+        return res.status(400).json({
+            error: "Query and organization ID are required",
+        });
         }
-        
+
         const chunks = await searchChunks(query, organizationId);
 
-
         if (chunks.length === 0) {
-        await ticketModel.create({
+        const ticket = await ticketModel.create({
             query,
-            userId,
             visitorId: visitorId || "anonymous-user",
+            organizationId,
+            status: "open",
         });
 
         return res.json({
             answer:
-            "I'm sorry, I couldn't find that information in our system. I've created a support ticket and our team will get back to you shortly.",
+            "I couldn't find that information. A support ticket has been created. and an agent will get back to you soon. Thank you for your patience!",
+            ticketId: ticket._id,
         });
         }
 
         const answer = await generateAIResponse({ query, chunks });
 
-        res.json({
-            answer,
-            chunks 
-        });
+        res.json({ answer });
 
     } catch (err) {
         console.error("❌ AI Error:", err);
@@ -50,7 +47,12 @@ export const handleAI = async (req, res) => {
 
 export const getTickets = async (req, res) => {
     try {
-        const tickets = await ticketModel.find().sort({ createdAt: -1 });
+        const organizationId = req.user.organizationId;
+
+        const tickets = await ticketModel
+        .find({ organizationId })
+        .sort({ createdAt: -1 });
+
         res.json(tickets);
     } catch (err) {
         console.error("❌ Get Tickets Error:", err);
@@ -76,22 +78,24 @@ export const respondTicket = async (req, res) => {
 
         ticket.response = response;
         ticket.status = "resolved";
+        ticket.resolvedBy = req.user._id;
+
         await ticket.save();
 
         const learnText = `
-            User asked: ${ticket.query}
-            Answer:
+            Support answer:
             ${response}
-            `;
+            Related question:
+            ${ticket.query}`;
 
-await processText(learnText, ticket.userId);
+        await processText(learnText, ticket.organizationId);
 
         res.json({
         message: "Ticket resolved and learned successfully",
         ticket,
         });
 
-    }catch (err) {
+    } catch (err) {
         console.error("❌ Respond Ticket Error:", err);
         res.status(500).json({ error: "Failed to respond to ticket" });
     }

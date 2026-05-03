@@ -13,11 +13,10 @@ export const searchChunks = async (query, organizationId) => {
         },
     });
 
-    const matches = result.matches.slice(0, 3); 
+    console.log("RAW MATCHES:", result.matches);
 
-    const bestMatch = matches.find(m => m.score > 0.7);
+    if (!result.matches || result.matches.length === 0) return [];
 
-    if (!bestMatch) return [];
-
-    return [bestMatch.metadata.text];
+  // 👉 always return top match (no strict threshold)
+    return result.matches.map(m => m.metadata.text);
 };
