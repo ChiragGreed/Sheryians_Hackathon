@@ -1,7 +1,7 @@
 import mongoose from "mongoose";
 import crypto from "crypto";
 
-const agentInvitationSchema = new mongoose.Schema({
+const InvitationSchema = new mongoose.Schema({
     email: {
         type: String,
         required: [true, "Email is required"],
@@ -34,7 +34,7 @@ const agentInvitationSchema = new mongoose.Schema({
 }, { timestamps: true });
 
 // Generate unique token before saving
-agentInvitationSchema.pre('save', function () {
+InvitationSchema.pre('save', function () {
     if (this.isNew) {
         this.token = crypto.randomBytes(32).toString('hex');
         // Set expiration to 7 days from now
@@ -43,6 +43,6 @@ agentInvitationSchema.pre('save', function () {
 
 });
 
-const agentInvitationModel = mongoose.model("agentInvitations", agentInvitationSchema);
+const InvitationModel = mongoose.model("Invitations", InvitationSchema);
 
-export default agentInvitationModel;
+export default InvitationModel;
