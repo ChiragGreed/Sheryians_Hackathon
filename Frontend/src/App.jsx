@@ -36,7 +36,7 @@ const App = () => {
           ]
         },
         {
-          path: "accept-agent-invitation",
+          path: "agent/accept-invitation",
           element: <AcceptAgentInvitation />
         },
       ]
