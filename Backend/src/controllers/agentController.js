@@ -191,7 +191,7 @@ export const acceptAgentInvitation = async (req, res) => {
                 }], { session });
 
                 // Update invitation
-                await agentInvitationModel.updateOne(
+                await InvitationModel.updateOne(
                     { _id: invitation._id },
                     {
                         status: "accepted",
@@ -322,7 +322,7 @@ export const getOrganizationInvitations = async (req, res) => {
             });
         }
 
-        const invitations = await agentInvitationModel
+        const invitations = await InvitationModel
             .find({ organizationId: admin.organizationId })
             .populate("invitedBy", "username email")
             .populate("acceptedBy", "username email")
@@ -360,7 +360,7 @@ export const cancelInvitation = async (req, res) => {
             });
         }
 
-        const invitation = await agentInvitationModel.findOne({
+        const invitation = await InvitationModel.findOne({
             _id: invitationId,
             organizationId: admin.organizationId
         });

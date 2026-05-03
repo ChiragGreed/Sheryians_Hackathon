@@ -13,11 +13,11 @@ const adminRouter = express.Router();
 // Send agent invitation (Admin only)
 adminRouter.post("/invite", verifyToken, sendAgentInvitation);
 
-// Accept agent invitation (Public route with token)
-adminRouter.get("/accept-invitation", acceptAgentInvitation);
+// Accept agent invitation (Public route with token) - POST request
+adminRouter.post("/accept-invitation", acceptAgentInvitation);
 
 // Verify invitation token (Public route with token)
-adminRouter.get("/verify-token", verifyInvitationToken);
+adminRouter.get("/verify-invitation", verifyInvitationToken);
 
 // Get organization invitations (Admin only)
 adminRouter.get("/invitations", verifyToken, getOrganizationInvitations);
