@@ -6,14 +6,14 @@ import { processText } from "../services/pipeline.service.js";
 export const uploadPDF = async (req, res) => {
     try {
         const file = req.file;
-        const { organizationId } = req.body; 
+        const organizationId = req.user?.organizationId;
 
         if (!file) {
         return res.status(400).json({ error: "No file uploaded" });
         }
 
         if (!organizationId) {
-        return res.status(400).json({ error: "organizationId is required" });
+        return res.status(401).json({ error: "organizationId is required" });
         }
 
         const uint8Array = new Uint8Array(file.buffer);
@@ -60,7 +60,8 @@ export const uploadPDF = async (req, res) => {
 
 export const uploadText = async (req, res) => {
     try {
-        const { text, organizationId } = req.body;
+        const { text } = req.body;
+        const organizationId = req.user?.organizationId;
 
         if (!text) {
         return res.status(400).json({ error: "Text is required" });
