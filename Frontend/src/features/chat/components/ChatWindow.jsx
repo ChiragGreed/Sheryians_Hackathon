@@ -15,6 +15,7 @@ const ChatWindow = ({
   socketStatus = 'connected',
   onSendMessage,
   onTyping,
+  onAskAI, // Added
   activeThread = { name: 'New Conversation', status: 'OPEN' },
 }) => {
   const isDisabled = ticketStatus === 'resolved' || ticketStatus === 'closed';
@@ -88,6 +89,7 @@ const ChatWindow = ({
       <MessageInput
         onSendMessage={onSendMessage}
         onTyping={onTyping}
+        onAskAI={onAskAI}
         disabled={isDisabled}
       />
     </div>

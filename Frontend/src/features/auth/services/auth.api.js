@@ -25,7 +25,7 @@ export async function loginApi({ email, password }) {
     return res
 }
 
-export async function getMeApi({ email, password }) {
+export async function getMeApi() {
     const res = await api.get("/getMe")
     return res
 }
