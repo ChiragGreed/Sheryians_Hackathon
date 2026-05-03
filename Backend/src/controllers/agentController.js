@@ -5,7 +5,6 @@ import { sendAgentInvitationEmail, sendAgentAcceptanceConfirmation } from "../se
 import JWT from "jsonwebtoken";
 import { Config } from "../config/config.js";
 import mongoose from "mongoose";
-import agentInvitationModel from "../models/InvitationModel.js";
 
 /**
  * Send agent invitation email
@@ -129,7 +128,7 @@ export const acceptAgentInvitation = async (req, res) => {
         }
 
         // Find invitation
-        const invitation = await agentInvitationModel.findOne({ token });
+        const invitation = await InvitationModel.findOne({ token });
 
         if (!invitation) {
             return res.status(404).json({
@@ -263,7 +262,7 @@ export const verifyInvitationToken = async (req, res) => {
             });
         }
 
-        const invitation = await agentInvitationModel.findOne({ token }).populate("organizationId", "name");
+        const invitation = await InvitationModel.findOne({ token }).populate("organizationId", "name");
 
         if (!invitation) {
             return res.status(404).json({

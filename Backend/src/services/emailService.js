@@ -49,25 +49,52 @@ const sendEmail = async (to, subject, htmlBody) => {
  */
 export const sendAgentInvitationEmail = async (recipientEmail, organizationName, invitationToken, frontendUrl = "https://sheryians-hackathon.onrender.com") => {
     try {
-        const acceptanceLink = `${frontendUrl}/accept-invitation?token=${invitationToken}`;
+        const acceptanceLink = `${frontendUrl}/api/agent/accept-invitation?token=${invitationToken}`;
 
         const html = `
-            <div style="font-family: Arial, sans-serif; line-height: 1.6; color: #333;">
-                <h2>Agent Invitation</h2>
-                <p>You have been invited to join <strong>${organizationName}</strong> as an Agent.</p>
-                <p>Click the link below to accept the invitation:</p>
-                <p>
-                    <a href="${acceptanceLink}" style="display: inline-block; padding: 12px 24px; background-color: #4CAF50; color: white; text-decoration: none; border-radius: 4px;">
-                        Accept Invitation
-                    </a>
-                </p>
-                <p>Or copy this link in your browser:</p>
-                <p><code>${acceptanceLink}</code></p>
-                <p style="color: #666; font-size: 12px;">
-                    This invitation link will expire in 7 days. If you didn't expect this invitation, please ignore this email.
-                </p>
-            </div>
-        `;
+            < div style = "background:#0a0a0a; padding: 40px 20px; font-family: 'Helvetica Neue', Helvetica, sans-serif;" >
+                <div style="max-width:600px; width:100%; margin:0 auto; background:#111; border:1px solid #1a1a1a; border-radius:4px; overflow:hidden; box-shadow:0 0 60px rgba(180,255,80,0.07);">
+
+                    <!-- Header -->
+                    <div style="background:#0d0d0d; border-bottom:1px solid #1e1e1e; padding:24px 40px; display:flex; align-items:center; justify-content:space-between;">
+                        <span style="color:#b4ff50; font-size:20px; font-weight:800; letter-spacing:-0.5px;">SolveX</span>
+                        <span style="border:1px solid #2a2a2a; border-radius:20px; padding:5px 14px; color:#b4ff50; font-size:10px; letter-spacing:2px; text-transform:uppercase;">🤖 AI Customer Support System</span>
+                    </div>
+
+                    <!-- Body -->
+                    <div style="padding:48px 40px;">
+                        <div style="margin-bottom:24px;">
+                            <span style="background:rgba(180,255,80,0.08); border:1px solid rgba(180,255,80,0.2); color:#b4ff50; font-size:10px; letter-spacing:2.5px; text-transform:uppercase; padding:6px 14px; border-radius:2px;">Agent Invitation</span>
+                        </div>
+
+                        <h2 style="color:#fff; font-size:28px; font-weight:800; letter-spacing:-1px; line-height:1.2; margin:0 0 20px 0; text-transform:uppercase;">You've Been<br /><span style="color:#b4ff50;">Invited.</span></h2>
+
+                        <p style="color:#888; font-size:15px; line-height:1.7; margin:0 0 8px 0;">You have been invited to join <strong style="color:#ccc;">${organizationName}</strong> as an Agent on SolveX.</p>
+                        <p style="color:#888; font-size:15px; line-height:1.7; margin:0 0 36px 0;">Click the button below to accept and get started.</p>
+
+                        <a href="${acceptanceLink}" style="display:inline-block; padding:14px 32px; background:#b4ff50; color:#0a0a0a; text-decoration:none; border-radius:3px; font-size:12px; font-weight:800; letter-spacing:2px; text-transform:uppercase; margin-bottom:36px;">Accept Invitation →</a>
+
+                        <div style="border-top:1px solid #1e1e1e; margin:36px 0;"></div>
+
+                        <p style="color:#555; font-size:12px; margin:0 0 10px 0; text-transform:uppercase; letter-spacing:1px;">Or copy this link:</p>
+                        <div style="background:#0d0d0d; border:1px solid #1e1e1e; border-left:3px solid #b4ff50; padding:12px 16px; border-radius:2px; margin-bottom:36px;">
+                            <code style="color:#b4ff50; font-size:12px; word-break:break-all; font-family:'Courier New', monospace;">${acceptanceLink}</code>
+                        </div>
+
+                        <p style="color:#444; font-size:11px; line-height:1.6; margin:0; border-top:1px solid #1a1a1a; padding-top:24px;">
+                            This invitation link will expire in <strong style="color:#555;">7 days</strong>. If you didn't expect this invitation, please ignore this email.
+                        </p>
+                    </div>
+
+                    <!-- Footer -->
+                    <div style="background:#0d0d0d; border-top:1px solid #1a1a1a; padding:16px 40px; display:flex; align-items:center; justify-content:space-between;">
+                        <span style="color:#333; font-size:11px;">© SolveX · AI Customer Support</span>
+                        <span style="color:#b4ff50; font-size:11px; letter-spacing:1px;">SECURE INVITE</span>
+                    </div>
+
+                </div>
+  </div >
+    `;
 
         const data = await sendEmail(
             recipientEmail,
