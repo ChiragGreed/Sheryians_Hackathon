@@ -7,6 +7,11 @@ const InvitationSchema = new mongoose.Schema({
         required: [true, "Email is required"],
         lowercase: true
     },
+    token: {
+        type: String,
+        unique: true,
+        required: true
+    },
     organizationId: {
         type: mongoose.Schema.Types.ObjectId,
         ref: "organizations",
@@ -21,6 +26,10 @@ const InvitationSchema = new mongoose.Schema({
         type: String,
         enum: ["pending", "accepted", "rejected", "expired"],
         default: "pending"
+    },
+    expiresAt: {
+        type: Date,
+        required: true
     },
     acceptedAt: {
         type: Date,
