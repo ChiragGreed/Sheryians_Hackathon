@@ -84,7 +84,7 @@ export const sendAgentInvitation = async (req, res) => {
         const organization = await organizationModel.findById(admin.organizationId);
 
         // Send invitation email
-        const frontendUrl = process.env.FRONTEND_URL || "http://localhost:5173";
+        const frontendUrl = "https://sheryians-hackathon.onrender.com" || "http://localhost:9010";
         await sendAgentInvitationEmail(
             agentEmail,
             organization.name,
