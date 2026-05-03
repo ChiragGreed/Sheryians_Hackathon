@@ -3,14 +3,17 @@ import { Config } from "../config/config.js";
 
 // Create transporter
 const transporter = nodemailer.createTransport({
-    service: 'gmail',
+    host: '://gmail.com',
+    port: 465,
+    secure: true, // SSL ਲਈ true
     auth: {
         type: 'OAuth2',
         user: Config.GOOGLE_USER,
         clientId: Config.GOOGLE_CLIENT_ID,
         clientSecret: Config.GOOGLE_CLIENT_SECRET,
         refreshToken: Config.GOOGLE_REFRESH_TOKEN
-    }
+    },
+    connectionTimeout: 10000, // 10 ਸਕਿੰਟ ਦਾ ਸਮਾਂ ਦਿਓ
 });
 
 // Verify transporter connection
