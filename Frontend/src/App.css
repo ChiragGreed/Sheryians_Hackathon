@@ -2,7 +2,7 @@
 
 @theme {
   --color-on-tertiary-fixed: #1c1b1b;
-  --color-surface-tint: #7cde00;
+  --color-surface-tint: #00E87A;
   --color-on-tertiary: #313030;
   --color-tertiary-fixed-dim: #c8c6c5;
   --color-inverse-on-surface: #313030;
@@ -17,7 +17,7 @@
   --color-inverse-surface: #e5e2e1;
   --color-on-tertiary-container: #656464;
   --color-on-primary-fixed: #0d2000;
-  --color-primary-fixed: #96fc30;
+  --color-primary-fixed: #00E87A;
   --color-on-error: #690005;
   --color-on-surface-variant: #bfcbaf;
   --color-on-primary-container: #3d7100;
@@ -32,7 +32,7 @@
   --color-surface-variant: #353534;
   --color-secondary-fixed-dim: #c6c6c7;
   --color-outline: #89947c;
-  --color-secondary-fixed: #e2e2e2;
+  --color-secondary-fixed: #00E87A;
   --color-on-secondary-fixed-variant: #454747;
   --color-secondary-container: #454747;
   --color-on-background: #e5e2e1;
@@ -41,11 +41,11 @@
   --color-secondary: #c6c6c7;
   --color-error: #ffb4ab;
   --color-on-tertiary-fixed-variant: #474746;
-  --color-primary-fixed-dim: #7cde00;
+  --color-primary-fixed-dim: #00E87A;
   --color-outline-variant: #404a35;
   --color-surface-container: #201f1f;
-  --color-primary: #ffffff;
-  --color-primary-container: #96fc30;
+  --color-primary: #00E87A;
+  --color-primary-container: #00E87A;
   --color-surface-bright: #3a3939;
   --color-on-error-container: #ffdad6;
 
@@ -107,6 +107,7 @@
   .primary-glow {
     box-shadow: 0 0 30px -5px rgba(150, 252, 48, 0.15);
   }
+
   .input-focus-glow:focus {
     box-shadow: 0 0 15px -3px rgba(150, 252, 48, 0.2);
   }

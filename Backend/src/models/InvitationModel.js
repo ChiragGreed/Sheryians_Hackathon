@@ -17,6 +17,15 @@ const InvitationSchema = new mongoose.Schema({
         ref: "users",
         required: [true, "Invited by user ID is required"]
     },
+    // FIX: token and expiresAt were missing from schema — Mongoose was silently dropping them
+    token: {
+        type: String,
+        unique: true,
+        index: true
+    },
+    expiresAt: {
+        type: Date
+    },
     status: {
         type: String,
         enum: ["pending", "accepted", "rejected", "expired"],
@@ -37,10 +46,8 @@ const InvitationSchema = new mongoose.Schema({
 InvitationSchema.pre('save', function () {
     if (this.isNew) {
         this.token = crypto.randomBytes(32).toString('hex');
-        // Set expiration to 7 days from now
         this.expiresAt = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000);
     }
-
 });
 
 const InvitationModel = mongoose.model("Invitations", InvitationSchema);
