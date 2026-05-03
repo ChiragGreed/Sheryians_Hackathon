@@ -6,37 +6,9 @@ import React, { useState } from 'react';
 //   activeThreadId: string
 //   onSelectThread(threadId): function
 
-// Mock threads for UI preview — replace with real data when hooks layer connects
-const MOCK_THREADS = [
-  {
-    id: 'thread-1',
-    name: 'Support Ticket #001',
-    preview: 'I need help with my billing issue...',
-    time: '2m ago',
-    isActive: true,
-    isOnline: true,
-  },
-  {
-    id: 'thread-2',
-    name: 'Security Query #002',
-    preview: 'Unidentified login attempt detected...',
-    time: '1h ago',
-    isActive: false,
-    isOnline: false,
-  },
-  {
-    id: 'thread-3',
-    name: 'API Integration #003',
-    preview: 'Check the latest API documentation...',
-    time: 'Yesterday',
-    isActive: false,
-    isOnline: false,
-  },
-];
-
 const ThreadList = ({
-  threads = MOCK_THREADS,
-  activeThreadId = 'thread-1',
+  threads = [],
+  activeThreadId = null,
   onSelectThread = (id) => console.log('Select thread:', id),
 }) => {
   const [searchValue, setSearchValue] = useState('');

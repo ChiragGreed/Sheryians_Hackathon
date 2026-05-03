@@ -22,6 +22,5 @@ export async function login(email, password){
         password
     })
 
-    console.log(res);
     return res
 }

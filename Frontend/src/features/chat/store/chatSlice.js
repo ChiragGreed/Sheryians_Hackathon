@@ -1,13 +1,13 @@
 import { createSlice } from '@reduxjs/toolkit';
 
 const initialState = {
-    ticketId: null,           // Set after join:room succeeds
-    messages: [],             // Array of { _id, role, content, createdAt }
-    socketStatus: 'idle',     // Frontend-only: 'idle' | 'connecting' | 'connected' | 'disconnected'
-    ticketStatus: null,       // Mirrors backend enum: 'open' | 'resolved' | 'escalated' | 'closed'
-    isAITyping: false,        // Controls AI typing bubble visibility
-    isUserTyping: false,      // Other party is typing (for agent view)
-    error: null,              // Error message string or null
+    ticketId: null,           
+    messages: [],             
+    socketStatus: 'idle',     
+    ticketStatus: null,       
+    isAITyping: false,        
+    isUserTyping: false,      
+    error: null,              
 };
 
 const chatSlice = createSlice({
